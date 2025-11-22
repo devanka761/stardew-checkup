@@ -1,0 +1,24 @@
+@use "./variables" as v;
+@use "./animations";
+@use "./main";
+
+.app {
+  width: 100%;
+  overflow: visible;
+}
+
+html {
+  font-family: v.$systemfont;
+  font-size: 16px;
+}
+
+body {
+  height: auto;
+  overflow: visible;
+  overflow-y: auto;
+  font-size: v.$defaultSize;
+}
+a,
+a:visited {
+  color: v.$pm1;
+}
