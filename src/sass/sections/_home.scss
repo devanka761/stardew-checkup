@@ -1,0 +1,101 @@
+@use "../variables" as v;
+
+.home {
+  width: 100%;
+  min-height: 100svh;
+  background-image: url("../../public/assets/sdv/arts/night_mountain.png");
+  background-position: calc(100% - 35%) center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  image-rendering: pixelated;
+  padding: v.$bigPadding;
+  .title {
+    padding: calc(v.$bigPadding * 2) v.$bigPadding;
+    text-align: center;
+  }
+  .form {
+    display: block;
+    width: 100%;
+    max-width: 1000px;
+    margin: 0 auto;
+    margin-bottom: calc(v.$bigPadding * 2);
+    .field {
+      padding: v.$bigPadding;
+      width: fit-content;
+      max-width: 100%;
+      margin: 0 auto;
+      margin-bottom: calc(v.$bigPadding * 2);
+      &.form-inputs {
+        font-size: v.$dialogueSize;
+        text-align: center;
+        background-color: rgba(v.$px1, 0.8);
+        border-radius: 10px;
+        input {
+          display: none;
+        }
+        label,
+        p {
+          display: block;
+          line-height: 1.5;
+        }
+        .save-file-name {
+          &.has-file {
+            color: v.$pm1;
+          }
+        }
+        .btn {
+          padding: v.$mediumPadding v.$bigPadding;
+          background-color: v.$pm1;
+          color: v.$px1;
+          font-weight: 600;
+          border-radius: 5px;
+          text-transform: uppercase;
+          text-align: center;
+          margin-top: v.$smallPadding;
+        }
+      }
+      &.note {
+        font-size: calc(v.$defaultSize * 0.8);
+        background-color: rgba(v.$px1, 0.8);
+        border-radius: 10px;
+        p,
+        li {
+          line-height: 1.5;
+          margin: v.$smallPadding 0;
+          hyphens: none;
+          word-break: break-all;
+          word-break: break-word;
+        }
+      }
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+  }
+  .quick-nav {
+    width: 100%;
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: v.$bigPadding;
+    background-color: rgba(v.$px1, 0.8);
+    border-radius: 10px;
+    text-align: center;
+    .quick-actions {
+      margin-top: v.$bigPadding;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: v.$bigPadding;
+      a {
+        font-size: calc(v.$defaultSize * 0.8);
+        display: block;
+        padding: v.$mediumPadding;
+        border-radius: 10px;
+        background-color: v.$pm2;
+        // color: v.$white;
+        text-decoration: none;
+      }
+    }
+  }
+}

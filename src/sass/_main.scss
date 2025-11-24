@@ -6,8 +6,8 @@
   box-sizing: border-box;
 }
 html {
-  font-size: 18.2px;
-  height: 100svh;
+  font-size: 16px;
+  height: 100dvh;
   scroll-behavior: smooth;
   scrollbar-color: v.$pm1 rgba(v.$px1, 0.5);
   scrollbar-width: thin;
@@ -21,20 +21,9 @@ html {
 }
 
 body {
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
   background-color: v.$px1;
   color: v.$softwhite;
   font-size: v.$defaultSize;
-}
-
-.app {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
 }
 
 button,
@@ -48,13 +37,17 @@ textarea {
 
 button,
 .btn,
-[role="button"],
 button:hover,
-.btn:hover,
-[role="button"]:hover {
+.btn:hover {
   border: none;
   outline: none;
 }
+
+button,
+.btn {
+  cursor: pointer;
+}
+
 input {
   color: v.$white;
 }
@@ -78,6 +71,30 @@ input[type="number"] {
 .center {
   text-align: center;
 }
+.jstf {
+  text-align: justify;
+  text-align-last: left;
+}
 img {
   pointer-events: none;
+}
+
+a,
+a:visited {
+  color: v.$pm1;
+}
+
+.main {
+  width: 100%;
+}
+
+span.mono {
+  font-family: v.$monofont;
+  padding: 3px;
+  border-radius: 5px;
+  background-color: rgba(v.$px1, 0.5);
+  color: v.$syellow;
+  &.red {
+    color: v.$cred;
+  }
 }
