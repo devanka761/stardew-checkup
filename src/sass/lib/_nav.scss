@@ -81,6 +81,9 @@
   &.out {
     animation: nav_out 0.3s forwards;
   }
+  &.hide {
+    display: none;
+  }
 }
 
 @keyframes nav_in {

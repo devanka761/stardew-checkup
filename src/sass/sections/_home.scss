@@ -10,66 +10,62 @@
   image-rendering: pixelated;
   padding: v.$bigPadding;
   .title {
-    padding: calc(v.$bigPadding * 2) v.$bigPadding;
+    padding: v.$bigPadding;
     text-align: center;
   }
   .form {
     display: block;
-    width: 100%;
+    padding: v.$bigPadding;
+    width: fit-content;
+    max-width: 100%;
+    margin: 0 auto;
+    margin-bottom: calc(v.$bigPadding * 2);
+
+    font-size: v.$dialogueSize;
+    text-align: center;
+    background-color: rgba(v.$px1, 0.8);
+    border-radius: 10px;
+    input {
+      display: none;
+    }
+    label,
+    p {
+      display: block;
+      line-height: 1.5;
+    }
+    .save-file-name {
+      &.has-file {
+        color: v.$pm1;
+      }
+    }
+    .btn {
+      display: block;
+      width: 100%;
+      padding: v.$mediumPadding v.$bigPadding;
+      background-color: v.$pm1;
+      color: v.$px1;
+      font-weight: 600;
+      border-radius: 5px;
+      text-transform: uppercase;
+      margin-top: v.$smallPadding;
+    }
+  }
+  .quick-note {
+    padding: v.$bigPadding;
+    width: fit-content;
     max-width: 1000px;
     margin: 0 auto;
     margin-bottom: calc(v.$bigPadding * 2);
-    .field {
-      padding: v.$bigPadding;
-      width: fit-content;
-      max-width: 100%;
-      margin: 0 auto;
-      margin-bottom: calc(v.$bigPadding * 2);
-      &.form-inputs {
-        font-size: v.$dialogueSize;
-        text-align: center;
-        background-color: rgba(v.$px1, 0.8);
-        border-radius: 10px;
-        input {
-          display: none;
-        }
-        label,
-        p {
-          display: block;
-          line-height: 1.5;
-        }
-        .save-file-name {
-          &.has-file {
-            color: v.$pm1;
-          }
-        }
-        .btn {
-          padding: v.$mediumPadding v.$bigPadding;
-          background-color: v.$pm1;
-          color: v.$px1;
-          font-weight: 600;
-          border-radius: 5px;
-          text-transform: uppercase;
-          text-align: center;
-          margin-top: v.$smallPadding;
-        }
-      }
-      &.note {
-        font-size: calc(v.$defaultSize * 0.8);
-        background-color: rgba(v.$px1, 0.8);
-        border-radius: 10px;
-        p,
-        li {
-          line-height: 1.5;
-          margin: v.$smallPadding 0;
-          hyphens: none;
-          word-break: break-all;
-          word-break: break-word;
-        }
-      }
-      &:last-child {
-        margin-bottom: 0;
-      }
+    font-size: calc(v.$defaultSize * 0.8);
+    background-color: rgba(v.$px1, 0.8);
+    border-radius: 10px;
+    p,
+    li {
+      line-height: 1.5;
+      margin: v.$smallPadding 0;
+      hyphens: none;
+      word-break: break-all;
+      word-break: break-word;
     }
   }
   .quick-nav {

@@ -1,6 +1,10 @@
 // import "webfont-awesome-pro/scss/allstyles.scss"
 import "../sass/app.scss"
-import nav from "./lib/nav"
+import { nav } from "./lib/nav"
+import Home from "./main/Home"
 
 nav()
-console.log("oke")
+
+window.onload = () => {
+  new Home().init()
+}

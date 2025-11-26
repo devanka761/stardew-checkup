@@ -16,16 +16,7 @@ async function openClose(nav: HTMLElement, btnNav: HTMLElement) {
   nav.classList.remove("out")
 }
 
-export default function (): void {
-  const isScrollable: NodeListOf<HTMLElement> = document.querySelectorAll("[scroll]")
-  isScrollable.forEach((escroll) => {
-    escroll.onclick = (e) => {
-      e.preventDefault()
-      const eView: string | null = escroll.getAttribute("href")?.replace("#", "") || null
-      const eSection: HTMLElement | null = eView ? document.getElementById(eView) : null
-      if (eSection) eSection.scrollIntoView()
-    }
-  })
+export function nav(): void {
   const nav: HTMLElement | null = document.querySelector(".nav")
   const btnNav: HTMLElement | null = nav?.querySelector(".btn-menu") || null
   if (nav && btnNav) btnNav.onclick = () => openClose(nav, btnNav)
@@ -59,4 +50,23 @@ export default function (): void {
       }
     }
   })
+}
+
+export function updateScrollable(): void {
+  const isScrollable: NodeListOf<HTMLElement> = document.querySelectorAll("[scroll]")
+  isScrollable.forEach((escroll) => {
+    escroll.onclick = (e) => {
+      e.preventDefault()
+      const eView: string | null = escroll.getAttribute("href")?.replace("#", "") || null
+      const eSection: HTMLElement | null = eView ? document.getElementById(eView) : null
+      if (eSection) eSection.scrollIntoView()
+    }
+  })
+}
+
+export function showNav(): void {
+  const nav: HTMLElement | null = document.querySelector(".nav")
+  if (nav) {
+    nav.classList.remove("hide")
+  }
 }

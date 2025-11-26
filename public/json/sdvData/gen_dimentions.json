@@ -1,0 +1,10 @@
+{
+  "body": { "file": "bodies", "x": 16, "y": 32, "ox": 3, "oy": 1, "z": 2, "idx": 1 },
+  "eyes": { "file": "other", "x": 16, "y": 32, "ox": 2, "oy": 1, "z": 2, "idx": 2 },
+  "pant": { "file": "pants", "x": 16, "y": 32, "ox": 12, "oy": 21, "z": 10, "idx": 3 },
+  "shirt": { "file": "shirts", "x": 8, "y": 8, "ox": 1, "oy": 4, "z": 16, "idx": 4 },
+  "accessory": { "file": "accessories", "x": 16, "y": 16, "ox": 1, "oy": 2, "z": 8, "idx": 5 },
+  "hair": { "file": "hairstyles", "x": 16, "y": 32, "ox": 1, "oy": [3, 4], "z": 8, "idx": 6 },
+  "hat": { "file": "hats", "x": 20, "y": 20, "ox": 1, "oy": 4, "z": 12, "idx": 7 },
+  "arm": { "file": "arms", "x": 16, "y": 32, "ox": 3, "oy": 1, "z": 2, "idx": 8 }
+}
