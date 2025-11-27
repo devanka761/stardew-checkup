@@ -1,6 +1,7 @@
 @use "../variables" as v;
 
 .farmer {
+  // background: linear-gradient(165deg, v.$px1, v.$px25);
   background-color: v.$px1;
   padding: v.$bigPadding;
   .farmer-board {

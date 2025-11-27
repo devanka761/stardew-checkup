@@ -1,0 +1,22 @@
+[
+  {
+    "name": "Greenhorn",
+    "value": 15000
+  },
+  {
+    "name": "Cowpoke",
+    "value": 50000
+  },
+  {
+    "name": "Homesteader",
+    "value": 250000
+  },
+  {
+    "name": "Millionaire",
+    "value": 1000000
+  },
+  {
+    "name": "Legend",
+    "value": 10000000
+  }
+]

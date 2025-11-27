@@ -25,7 +25,7 @@ export class JSONStore {
       const request = window.indexedDB.open(this.dbName, this.dbVersion)
 
       request.onerror = (_event) => {
-        reject(new Error(`Failed opening db: ${request.error?.message}`))
+        reject(new Error(`Failed opening: ${request.error?.message}`))
       }
 
       request.onupgradeneeded = (event) => {
@@ -33,7 +33,6 @@ export class JSONStore {
 
         if (!db.objectStoreNames.contains(this.storeName)) {
           db.createObjectStore(this.storeName, { keyPath: "id" })
-          console.log(`Object Store '${this.storeName}' dibuat.`)
         }
       }
 
@@ -52,9 +51,7 @@ export class JSONStore {
     return new Promise((resolve, reject) => {
       const request = store.put(data)
 
-      request.onsuccess = () => {
-        console.log(`Data dengan ID '${data.id}' berhasil disimpan.`)
-      }
+      request.onsuccess = () => {}
 
       transaction.oncomplete = () => {
         db.close()
@@ -63,11 +60,11 @@ export class JSONStore {
 
       transaction.onerror = (_event) => {
         db.close()
-        reject(new Error(`Save transaction failed: ${transaction.error?.message}`))
+        reject(new Error(`Failed saving: ${transaction.error?.message}`))
       }
 
       request.onerror = (_event) => {
-        reject(new Error(`Put operation failed: ${request.error?.message}`))
+        reject(new Error(`Failed saving: ${request.error?.message}`))
       }
     })
   }
@@ -90,11 +87,11 @@ export class JSONStore {
 
       transaction.onerror = (_event) => {
         db.close()
-        reject(new Error(`Load failed: ${transaction.error?.message}`))
+        reject(new Error(`Failed loading: ${transaction.error?.message}`))
       }
 
       request.onerror = (_event) => {
-        reject(new Error(`Get operation failed: ${request.error?.message}`))
+        reject(new Error(`Failed loading: ${request.error?.message}`))
       }
     })
   }
@@ -116,11 +113,11 @@ export class JSONStore {
 
       transaction.onerror = (_event) => {
         db.close()
-        reject(new Error(`Load failed: ${transaction.error?.message}`))
+        reject(new Error(`Failed loading: ${transaction.error?.message}`))
       }
 
       request.onerror = (_event) => {
-        reject(new Error(`Get operation failed: ${request.error?.message}`))
+        reject(new Error(`Failed loading: ${request.error?.message}`))
       }
     })
   }
@@ -134,9 +131,7 @@ export class JSONStore {
     return new Promise((resolve, reject) => {
       const request = store.delete(id)
 
-      request.onsuccess = () => {
-        console.log(`Data dengan ID '${id}' berhasil dihapus.`)
-      }
+      request.onsuccess = () => {}
 
       transaction.oncomplete = () => {
         db.close()
@@ -145,11 +140,11 @@ export class JSONStore {
 
       transaction.onerror = (_event) => {
         db.close()
-        reject(new Error(`Transaksi penghapusan gagal: ${transaction.error?.message}`))
+        reject(new Error(`Failed deleting: ${transaction.error?.message}`))
       }
 
       request.onerror = (_event) => {
-        reject(new Error(`Operasi delete gagal: ${request.error?.message}`))
+        reject(new Error(`Failed deleting: ${request.error?.message}`))
       }
     })
   }
@@ -157,18 +152,17 @@ export class JSONStore {
   public deleteDatabase(): Promise<void> {
     return new Promise((resolve, reject) => {
       if (!window.indexedDB) {
-        return reject(new Error("IndexedDB tidak didukung."))
+        return reject(new Error("Browser is not supported."))
       }
 
       const request = window.indexedDB.deleteDatabase(this.dbName)
 
       request.onsuccess = () => {
-        console.log(`Database '${this.dbName}' berhasil dihapus.`)
         resolve()
       }
 
       request.onerror = (_event) => {
-        reject(new Error(`Gagal menghapus DB: ${request.error?.message}`))
+        reject(new Error(`Failed deleting: ${request.error?.message}`))
       }
     })
   }

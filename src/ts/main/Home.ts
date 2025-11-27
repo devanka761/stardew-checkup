@@ -4,10 +4,15 @@ import modal from "../lib/modal"
 import { showNav, updateScrollable } from "../lib/nav"
 import { readSaveFile } from "../lib/readXml"
 import { ISaveGame } from "../types/saveFile.types"
+import { PrimarySection } from "../types/section.types"
 import Farmer from "./Farmer"
+import Money from "./Money"
 import { sections } from "./SectionManager"
+import Summary from "./Summary"
 
-export default class Home {
+export default class Home implements PrimarySection {
+  readonly id: string = "home"
+
   private el: HTMLElement = kel("section", "home")
   private form!: HTMLFormElement
   private note?: HTMLDivElement
@@ -99,12 +104,15 @@ export default class Home {
     saveFileName.innerText = fileName
     this.lastFileName = fileName
 
-    if (sections.farmer) {
-      sections.farmer.destroy()
-    }
+    Object.values(sections)
+      .filter((itm) => itm && itm.id !== "home")
+      .forEach((itm) => {
+        if (itm) itm.destroy()
+      })
 
-    const farmer = new Farmer(saveData.players)
-    farmer.init()
+    new Summary(saveData).init()
+    new Farmer(saveData.players).init()
+    new Money(saveData).init()
   }
 
   private createNote(): HTMLDivElement {
@@ -132,9 +140,9 @@ export default class Home {
     quickNav.innerHTML = `
     <h3>Quick Navigation</h3>
     <div class="quick-actions">
+      <a scroll="1" href="#data-summary">Summary</a>
       <a scroll="1" href="#data-farmer">Farmer</a>
       <a scroll="1" href="#data-perfection-tracker">Perfection Tracker</a>
-      <a scroll="1" href="#data-summary">Summary</a>
       <a scroll="1" href="#data-money">Money</a>
       <a scroll="1" href="#data-skills">Skills</a>
       <a scroll="1" href="#data-skill-mastery">Skill Mastery</a>
@@ -180,10 +188,31 @@ export default class Home {
     this.renderData(saveData.data, fileName)
   }
 
+  destroy(): void {
+    this.el.remove()
+    sections.home = null
+  }
+
+  setParallax(): void {
+    window.addEventListener("scroll", () => {
+      const scrollHeight = window.scrollY
+      const paralaxTop = this.el.offsetTop
+
+      const clientHeight = paralaxTop + this.el.offsetHeight
+      const clientTop = paralaxTop - window.innerHeight
+      const offset = scrollHeight - paralaxTop
+
+      if (scrollHeight >= clientTop && scrollHeight < clientHeight) {
+        this.el.style.backgroundPositionY = offset * 0.6 + "px"
+      }
+    })
+  }
+
   init(): void {
     sections.home = this
     this.createElement()
     eroot().append(this.el)
     this.loadIfAvailable()
+    this.setParallax()
   }
 }

@@ -8,7 +8,7 @@ interface ISaveFile {
   data?: ISaveGame
 }
 
-const farmType = { "0": "Standard Farm", "1": "Riverland Farm", "2": "Forest Farm", "3": "Hilltop Farm", "4": "Wilderness Farm", "5": "Four Corners Farm", "6": "Beach Farm", "7": "Meadowlands Farm" }
+const farmType = { "0": "Standard Farm", "1": "Riverland Farm", "2": "Forest Farm", "3": "Hilltop Farm", "4": "Wilderness Farm", "5": "Four Corners Farm", "6": "Beach Farm", "7": "Meadowlands Farm", MeadowlandsFarm: "Meadowlands Farm" }
 
 export function readSaveFile(file: ISival): ISaveFile {
   const parser = new XMLParser()
@@ -25,25 +25,26 @@ export function readSaveFile(file: ISival): ISaveFile {
   const players = getPlayers([{ ...saveGame.player, isHost: true }, ...farmhands])
   const farmName = saveGame.player.farmName
   const whichFarm = farmType[saveGame.whichFarm as keyof typeof farmType]
+  const separateWallets = saveGame.player.useSeparateWallets
 
   const year = saveGame.year
   const dayOfMonth = saveGame.dayOfMonth
   const currentSeason = saveGame.currentSeason
   const uniqueID = saveGame.uniqueIDForThisGame
-  const ceremonySeen = "eventSeen_502261"
-  // const hasSeenCeremony = saveGame.player.previousActiveDialogueEvents?.item?.find(itm => {
-  //   return ["eventSeen_502261", "eventSeen_191393"].includes(itm.key?.string?._text || "-");
-  // }).key?.string?._text || null;
+  const ceremonySeen = players.find((p) => p.ceremonySeen)?.ceremonySeen
+  const gameVersion = saveGame.gameVersion
 
   const data: ISaveGame = {
     players,
     farmName,
+    separateWallets,
     whichFarm,
     year,
     dayOfMonth,
     currentSeason,
     uniqueID,
-    ceremonySeen
+    ceremonySeen,
+    gameVersion
   }
 
   return {

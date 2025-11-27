@@ -1,9 +1,11 @@
 import { eroot, kel } from "../lib/kel"
 import { playerCard } from "../lib/playerCard"
 import { IPlayer } from "../types/player.types"
+import { PrimarySection } from "../types/section.types"
 import { sections } from "./SectionManager"
 
-export default class Farmer {
+export default class Farmer implements PrimarySection {
+  readonly id: string = "farmer"
   private el: HTMLElement = kel("section", "farmer", { a: { id: "data-farmer" } })
 
   private host: HTMLDivElement = kel("div", "farmer-board farmer-host")
@@ -12,7 +14,7 @@ export default class Farmer {
   constructor(private players: IPlayer[]) {}
 
   private createHost(): void {
-    const title = kel("div", "title", { e: `<h2>Farmer</h2>` })
+    const title = kel("div", "title", { e: `<h2><i class="fa-duotone fa-hashtag fa-fw"></i> Farmer</h2>` })
     const field = kel("div", "field")
 
     const farmer = playerCard(this.players[0], 1)

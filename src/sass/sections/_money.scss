@@ -1,0 +1,51 @@
+@use "../variables" as v;
+
+.money {
+  // background: linear-gradient(135deg, v.$px1, v.$px2);
+  background-color: v.$px25;
+  padding: v.$bigPadding;
+  padding-bottom: calc(v.$bigPadding * 2);
+  .title {
+    padding: v.$bigPadding;
+    text-align: center;
+    margin: 0 auto;
+    margin-bottom: 20px;
+    h3 {
+      font-weight: 600;
+    }
+  }
+  .field {
+    text-align: center;
+    margin-bottom: v.$bigPadding;
+    .info {
+      font-size: v.$dialogueSize;
+      line-height: 1.5;
+      margin-bottom: v.$bigPadding;
+    }
+    .goal {
+      line-height: 1.5;
+      color: v.$cred;
+      .status {
+        font-size: calc(v.$defaultSize * 0.8);
+        color: v.$softwhite;
+      }
+      &.done {
+        color: v.$softwhite;
+        i {
+          color: v.$cgreen;
+        }
+        .status {
+          font-weight: 600;
+        }
+      }
+    }
+    &.breakdown {
+      .mono {
+        line-height: 1.75;
+      }
+    }
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+}

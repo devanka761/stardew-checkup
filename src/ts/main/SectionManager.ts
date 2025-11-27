@@ -1,12 +1,18 @@
-import Farmer from "./Farmer"
 import Home from "./Home"
+import Farmer from "./Farmer"
+import Summary from "./Summary"
+import Money from "./Money"
 
 export type ISection = {
-  farmer: Farmer | null
   home: Home | null
+  farmer: Farmer | null
+  summary: Summary | null
+  money: Money | null
 }
 
 export const sections: ISection = {
+  home: null,
   farmer: null,
-  home: null
+  summary: null,
+  money: null
 }

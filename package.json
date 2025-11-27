@@ -1,6 +1,6 @@
 {
   "name": "stardewcheckup",
-  "version": "1.0.0-wip.2",
+  "version": "1.0.0-wip.3",
   "description": "",
   "main": "dist/app.js",
   "scripts": {

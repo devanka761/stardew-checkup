@@ -5,6 +5,7 @@ interface IIdentity {
   playTime: (data: ISival) => ISival
   gender: (data: ISival) => ISival
   totalMoneyEarned: (data: ISival) => ISival
+  individualMoneyEarned: (data: ISival) => ISival
   spouse: (data: ISival) => ISival
   basicShipped: (data: ISival) => ISival
   monstersKilled: (data: ISival) => ISival
@@ -69,6 +70,34 @@ const identity: IIdentity = {
     return data.totalMoneyEarned
   },
 
+  individualMoneyEarned(data): number {
+    const oldObj = data.stats?.individualMoneyEarned
+
+    if (typeof oldObj === "number") {
+      return data.stats.individualMoneyEarned
+    }
+
+    const obj = data.stats?.Values?.item || {}
+
+    if (obj?.key?.string?.toString() === "individualMoneyEarned") {
+      if (obj?.value) {
+        const anyValue = Object.values(obj.value)[0]
+        if (anyValue) return anyValue as number
+      }
+    }
+
+    if (Array.isArray(obj)) {
+      const item = obj.find((itm) => itm.key?.string?.toString() === "individualMoneyEarned")
+
+      if (item?.value) {
+        const anyValue = Object.values(item.value)[0]
+        if (anyValue) return anyValue as number
+      }
+    }
+
+    return 0
+  },
+
   spouse(data): string | null {
     return data.spouse || null
   },
@@ -79,12 +108,12 @@ const identity: IIdentity = {
     const obj = data.basicShipped?.item || {}
 
     if (obj.key) {
-      items[obj.key.string.toString()] = obj.value.int
+      items[obj.key.string.toString()] = Object.values(obj.value)[0] as number
     }
 
     if (Array.isArray(obj)) {
       obj.forEach((itm) => {
-        items[itm.key.string.toString()] = itm.value.int
+        items[itm.key.string.toString()] = Object.values(itm.value)[0] as number
       })
     }
 
@@ -97,12 +126,12 @@ const identity: IIdentity = {
     const obj = data.stats?.specificMonstersKilled?.item || {}
 
     if (obj.key) {
-      items[obj.key.string.toString()] = obj.value.int
+      items[obj.key.string.toString()] = Object.values(obj.value)[0] as number
     }
 
     if (Array.isArray(obj)) {
       obj.forEach((itm) => {
-        items[itm.key.string.toString()] = itm.value.int
+        items[itm.key.string.toString()] = Object.values(itm.value)[0] as number
       })
     }
 
@@ -164,12 +193,12 @@ const identity: IIdentity = {
     const obj = data.recipesCooked?.item || {}
 
     if (obj.key) {
-      items[obj.key.string.toString()] = obj.value.int
+      items[obj.key.string.toString()] = Object.values(obj.value)[0] as number
     }
 
     if (Array.isArray(obj)) {
       obj.forEach((itm) => {
-        items[itm.key.string.toString()] = itm.value.int
+        items[itm.key.string.toString()] = Object.values(itm.value)[0] as number
       })
     }
 
@@ -182,12 +211,12 @@ const identity: IIdentity = {
     const obj = data.craftingRecipes?.item || {}
 
     if (obj.key) {
-      items[obj.key.string.toString()] = obj.value.int
+      items[obj.key.string.toString()] = Object.values(obj.value)[0] as number
     }
 
     if (Array.isArray(obj)) {
       obj.forEach((itm) => {
-        items[itm.key.string.toString()] = itm.value.int
+        items[itm.key.string.toString()] = Object.values(itm.value)[0] as number
       })
     }
 
@@ -241,6 +270,7 @@ export function getPlayers(players: ISival[]): IPlayer[] {
     playTime: identity.playTime(player),
     gender: identity.gender(player),
     totalMoneyEarned: identity.totalMoneyEarned(player),
+    individualMoneyEarned: identity.individualMoneyEarned(player),
     spouse: identity.spouse(player),
     basicShipped: identity.basicShipped(player),
     monstersKilled: identity.monstersKilled(player),

@@ -26,6 +26,7 @@ export interface IPlayer {
   playTime: number
   gender: string
   totalMoneyEarned: number
+  individualMoneyEarned: number
   spouse: string
   basicShipped: IKeyValueList
   monstersKilled: IKeyValueList

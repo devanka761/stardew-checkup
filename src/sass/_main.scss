@@ -94,6 +94,7 @@ span.mono {
   border-radius: 5px;
   background-color: rgba(v.$px1, 0.5);
   color: v.$syellow;
+  border: 1px solid rgba(v.$sgray, 0.5);
   &.red {
     color: v.$cred;
   }
