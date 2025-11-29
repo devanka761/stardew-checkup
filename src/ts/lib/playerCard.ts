@@ -429,8 +429,8 @@ export function playerCard(player: IPlayer, idx: number) {
   <div class="info">
     <ul>
       <li>${player.name} (P${idx})</li>
-      <li>${player.spouse ? "💍 " + player.spouse : "🔑 Single"}</li>
-      <li>🕘 ${sdate.durrTime(player.playTime)}</li>
+      <li>${player.spouse ? '<i class="fa-duotone fa-regular fa-ring-diamond fa-fw"></i>' + player.spouse : '<i class="fa-duotone fa-regular fa-key fa-fw"></i> Single'}</li>
+      <li><i class="fa-duotone fa-regular fa-clock fa-fw"></i> ${sdate.durrTime(player.playTime)}</li>
     </ul>
   </div>`
 

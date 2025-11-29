@@ -3,17 +3,6 @@
 .summary {
   // background: linear-gradient(135deg, v.$px1, v.$px2);
   background-color: v.$px25;
-  padding: v.$bigPadding;
-  padding-bottom: calc(v.$bigPadding * 2);
-  .title {
-    padding: v.$bigPadding;
-    text-align: center;
-    margin: 0 auto;
-    margin-bottom: 20px;
-    h3 {
-      font-weight: 600;
-    }
-  }
   .field {
     text-align: center;
     p {

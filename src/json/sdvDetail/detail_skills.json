@@ -1,0 +1,27 @@
+{
+  "skills": ["Farming", "Fishing", "Foraging", "Mining", "Combat"],
+  "exp_level": [100, 380, 770, 1300, 2150, 3300, 4800, 6900, 10000, 15000],
+  "max_exp": 15000,
+  "achieves": [
+    { "min": 1, "name": "Singular Talent (level 10 in a skill)" },
+    { "min": 5, "name": "Master of the Five Ways (level 10 in every skill)" }
+  ],
+  "titles": [
+    { "min": 0, "name": "Newcomer" },
+    { "min": 3, "name": "Greenhorn" },
+    { "min": 5, "name": "Bumpkin" },
+    { "min": 7, "name": "Cowpoke" },
+    { "min": 9, "name": "Farmhand" },
+    { "min": 11, "name": "Tiller" },
+    { "min": 13, "name": "Smallholder" },
+    { "min": 15, "name": "Sodbuster" },
+    { "min": 17, "name": "Farm{gender}" },
+    { "min": 19, "name": "Granger" },
+    { "min": 21, "name": "Planter" },
+    { "min": 23, "name": "Rancher" },
+    { "min": 25, "name": "Farmer" },
+    { "min": 27, "name": "Agriculturist" },
+    { "min": 29, "name": "Cropmaster" },
+    { "min": 30, "name": "Farm King" }
+  ]
+}

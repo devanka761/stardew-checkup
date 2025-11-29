@@ -99,3 +99,16 @@ span.mono {
     color: v.$cred;
   }
 }
+
+.fa-ul {
+  list-style: none;
+  margin-left: var(--fa-li-margin, 2rem);
+  li {
+    line-height: 1.5;
+    text-align: justify;
+    text-align-last: left;
+    .fa-li {
+      margin-left: var(--fa-li-margin, 0.5rem);
+    }
+  }
+}

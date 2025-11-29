@@ -3,18 +3,7 @@
 .farmer {
   // background: linear-gradient(165deg, v.$px1, v.$px25);
   background-color: v.$px1;
-  padding: v.$bigPadding;
   .farmer-board {
-    margin-bottom: 20px;
-    .title {
-      padding: v.$bigPadding;
-      text-align: center;
-      margin: 0 auto;
-      margin-bottom: 20px;
-      h3 {
-        font-weight: 600;
-      }
-    }
     .field {
       width: 100%;
       display: flex;
@@ -22,6 +11,7 @@
       justify-content: center;
       align-items: center;
       gap: 20px;
+      margin-bottom: v.$bigPadding;
       .card {
         min-width: 335px;
         display: flex;
@@ -85,7 +75,7 @@
       }
     }
     &:last-child {
-      margin-bottom: calc(v.$bigPadding * 2);
+      margin-bottom: 0;
     }
   }
 }

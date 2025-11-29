@@ -1,0 +1,38 @@
+@use "../variables" as v;
+
+.sect {
+  background-color: v.$px1;
+  padding: v.$bigPadding;
+  .title {
+    padding: v.$bigPadding;
+    text-align: center;
+    margin: 0 auto;
+    display: flex;
+    // flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: v.$mediumPadding;
+    h3 {
+      font-weight: 600;
+    }
+    .show-hide {
+      font-size: calc(v.$defaultSize * 0.7);
+      padding: v.$smallPadding;
+      border-radius: v.$mediumPadding;
+      background-color: v.$pm2;
+      cursor: pointer;
+    }
+  }
+  &.hide {
+    .field {
+      display: none;
+    }
+  }
+  .farmer-board {
+    &.hide {
+      .field {
+        display: none;
+      }
+    }
+  }
+}

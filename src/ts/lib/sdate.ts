@@ -65,13 +65,13 @@ const sdate = {
 
     let result = ""
     if (hours > 0) {
-      result += `${hours}${isFull ? " hour(s)" : " hr"} `
+      result += `${hours}${isFull ? " hour(s)" : "hr"} `
     }
     if (minutes > 0) {
-      result += `${minutes}${isFull ? " minute(s)" : " min"} `
+      result += `${minutes}${isFull ? " minute(s)" : "min"} `
     }
     if (seconds > 0 || result === "") {
-      result += `${seconds}${isFull ? " second(s)" : " s"}`
+      result += `${seconds}${isFull ? " second(s)" : "s"}`
     }
     return result.trim()
   },

@@ -1,0 +1,39 @@
+@use "../variables" as v;
+
+.skills {
+  background-color: v.$px1;
+  .field {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: start;
+    gap: v.$bigPadding;
+    margin-bottom: v.$bigPadding;
+    .card {
+      display: block;
+      padding: v.$bigPadding;
+      background-color: v.$px2;
+      border-radius: 10px;
+      ul {
+        li {
+          line-height: 1.75;
+          &.goal {
+            color: v.$cred;
+            .status {
+              color: v.$softwhite;
+            }
+            &.done {
+              color: v.$softwhite;
+              .status {
+                font-weight: 600;
+              }
+              i {
+                color: v.$cgreen;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

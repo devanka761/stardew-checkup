@@ -25,13 +25,23 @@ export function readSaveFile(file: ISival): ISaveFile {
   const players = getPlayers([{ ...saveGame.player, isHost: true }, ...farmhands])
   const farmName = saveGame.player.farmName
   const whichFarm = farmType[saveGame.whichFarm as keyof typeof farmType]
-  const separateWallets = saveGame.player.useSeparateWallets
+  if (!whichFarm) return { ok: false }
+  const separateWallets = !!saveGame.player.useSeparateWallets
 
   const year = saveGame.year
+  if (typeof year !== "number") return { ok: false }
+
   const dayOfMonth = saveGame.dayOfMonth
+  if (typeof dayOfMonth !== "number") return { ok: false }
+
   const currentSeason = saveGame.currentSeason
+  if (!currentSeason) return { ok: false }
+
   const uniqueID = saveGame.uniqueIDForThisGame
+  if (typeof uniqueID === "undefined" || uniqueID === null) return { ok: false }
+
   const ceremonySeen = players.find((p) => p.ceremonySeen)?.ceremonySeen
+
   const gameVersion = saveGame.gameVersion
 
   const data: ISaveGame = {

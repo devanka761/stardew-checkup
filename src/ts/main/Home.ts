@@ -9,6 +9,8 @@ import Farmer from "./Farmer"
 import Money from "./Money"
 import { sections } from "./SectionManager"
 import Summary from "./Summary"
+import { isValidGameVersion, minVersion } from "../parser/gameVersion"
+import Skills from "./Skills"
 
 export default class Home implements PrimarySection {
   readonly id: string = "home"
@@ -52,17 +54,24 @@ export default class Home implements PrimarySection {
       const file = input.files[0]
       const SaveFile = readSaveFile(await file.text())
 
-      if (!SaveFile.ok) {
+      if (!SaveFile.ok || !SaveFile.data) {
         await modal.abort()
         await modal.alert("SAVE FILE IS INVALID!")
         saveFileName.innerHTML = this.lastFileName
         return
       }
 
+      const saveData = SaveFile.data
+
+      if (!isValidGameVersion(saveData.gameVersion)) {
+        await modal.abort()
+        await modal.alert(`The minimum game version required is <b>${minVersion}</b><br/>Your game version in the save file is <b>v${saveData.gameVersion}</b>`)
+        saveFileName.innerHTML = this.lastFileName
+        return
+      }
+
       const fileName = file.name
       this.lastFileName = fileName
-
-      const saveData = SaveFile.data!
 
       this.renderData(saveData, fileName)
 
@@ -104,15 +113,16 @@ export default class Home implements PrimarySection {
     saveFileName.innerText = fileName
     this.lastFileName = fileName
 
-    Object.values(sections)
-      .filter((itm) => itm && itm.id !== "home")
-      .forEach((itm) => {
-        if (itm) itm.destroy()
-      })
+    const primarySections = Object.values(sections).filter((itm) => itm && itm.id !== "home")
+
+    primarySections.forEach((itm) => {
+      if (itm) itm.destroy()
+    })
 
     new Summary(saveData).init()
     new Farmer(saveData.players).init()
     new Money(saveData).init()
+    new Skills(saveData.players).init()
   }
 
   private createNote(): HTMLDivElement {

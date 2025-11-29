@@ -6,12 +6,13 @@ import { sections } from "./SectionManager"
 
 export default class Summary implements PrimarySection {
   readonly id: string = "summary"
-  private el: HTMLElement = kel("section", "summary", { a: { id: "data-summary" } })
+  private el: HTMLElement = kel("section", "sect summary", { a: { id: "data-summary" } })
 
   constructor(private data: ISaveGame) {}
 
   createElement(): void {
-    const title = kel("div", "title", { e: `<h2><i class="fa-duotone fa-hashtag fa-fw"></i> Summary</h2>` })
+    const showHide = this.showHide()
+    const title = kel("div", "title", { e: ['<h2><i class="fa-duotone fa-hashtag fa-fw"></i> Summary</h2>', showHide] })
 
     const field = kel("div", "field")
 
@@ -32,10 +33,29 @@ export default class Summary implements PrimarySection {
 
     this.el.append(title, field)
   }
+
+  showHide(): HTMLDivElement {
+    const btnShowHide = kel("div", "show-hide")
+    btnShowHide.innerHTML = `Hide Detail <i class="fa-solid fa-chevron-down"></i>`
+
+    btnShowHide.onclick = () => {
+      if (this.el.classList.contains("hide")) {
+        btnShowHide.innerHTML = `Hide Detail <i class="fa-solid fa-chevron-down"></i>`
+        this.el.classList.remove("hide")
+      } else {
+        btnShowHide.innerHTML = `Show Detail <i class="fa-solid fa-chevron-right"></i>`
+        this.el.classList.add("hide")
+      }
+    }
+
+    return btnShowHide
+  }
+
   destroy(): void {
     this.el.remove()
     sections.summary = null
   }
+
   init(): void {
     sections.summary = this
     this.createElement()
