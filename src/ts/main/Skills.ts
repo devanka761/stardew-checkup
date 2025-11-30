@@ -4,6 +4,7 @@ import { eroot, kel } from "../lib/kel"
 import { sections } from "./SectionManager"
 // import { toCommas } from "../lib/toCommas"
 import { IPlayer } from "../types/player.types"
+import { toCommas } from "../lib/toCommas"
 
 interface ISkillPoint {
   name: string
@@ -52,6 +53,38 @@ function getAchieve(achive: IAchieve, level10Count: number): HTMLLIElement {
   return li
 }
 
+function getReach(skill: ISkillPoint): HTMLLIElement {
+  const li = kel("li", "goal")
+
+  const isDone = skill.level >= 10
+
+  const icon = `fa-duotone fa-solid fa-circle-${isDone ? "check" : "xmark"} fa-fw`
+  const liText = `<span class='fa-li'><i class="${icon}"></i></span> ${skill.name} (level ${skill.level})`
+  li.innerHTML = liText
+
+  const status = kel("span", "status")
+  li.append(status)
+
+  if (isDone) {
+    li.classList.add("done")
+    status.innerHTML = " -- achieved"
+  } else {
+    const skills = detail_skills.exp_level
+
+    status.innerHTML = ` -- need `
+
+    if (skill.level < 9) {
+      const nextExp = skills[skill.level] - skill.exp
+      status.innerHTML += `${toCommas(nextExp)} more xp to level ${skill.level + 1} and `
+    }
+
+    const maxExp = detail_skills.max_exp - skill.exp
+    status.innerHTML += `${toCommas(maxExp)} more xp to level 10`
+  }
+
+  return li
+}
+
 function skillCard(player: IPlayer): HTMLDivElement {
   const name = player.name
 
@@ -83,6 +116,11 @@ function skillCard(player: IPlayer): HTMLDivElement {
   const achieves = detail_skills.achieves.map((achieve) => getAchieve(achieve, level10Count))
 
   const achieveCard = kel("ul", "fa-ul", { e: achieves })
+
+  const reaches = skills.filter((skill) => skill.name).map((skill) => getReach(skill))
+  const reachedCard = kel("ul", "fa-ul", { e: reaches })
+
+  achieveCard.append(reachedCard)
 
   const ul = kel("ul", "fa-ul", { e: [descTitle, descResult, achieveCard] })
 
