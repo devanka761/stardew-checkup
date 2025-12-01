@@ -11,6 +11,7 @@ import { sections } from "./SectionManager"
 import Summary from "./Summary"
 import { isValidGameVersion, minVersion } from "../parser/gameVersion"
 import Skills from "./Skills"
+import SkillMastery from "./SkillMastery"
 
 export default class Home implements PrimarySection {
   readonly id: string = "home"
@@ -123,6 +124,7 @@ export default class Home implements PrimarySection {
     new Farmer(saveData.players).init()
     new Money(saveData).init()
     new Skills(saveData.players).init()
+    new SkillMastery(saveData.players).init()
   }
 
   private createNote(): HTMLDivElement {

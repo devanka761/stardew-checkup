@@ -15,6 +15,9 @@ interface IAchieve {
   min: number
   name: string
 }
+interface IMaxedSkills {
+  [key: string]: number
+}
 
 function getFarmerLevel(skillPoints: ISkillPoint[]): number {
   const points = skillPoints.reduce((a, b) => a + b.level, 0)
@@ -40,14 +43,12 @@ function getAchieve(achive: IAchieve, level10Count: number): HTMLLIElement {
   const liText = `<span class='fa-li'><i class="${icon}"></i></span> ${achive.name}`
   li.innerHTML = liText
 
-  const status = kel("span", "status")
-  li.append(status)
-
   if (isDone) {
     li.classList.add("done")
-    status.innerHTML = " -- achieved"
   } else {
+    const status = kel("span", "status")
     status.innerHTML = ` -- need ${achive.min - level10Count} more`
+    li.append(status)
   }
 
   return li
@@ -62,16 +63,16 @@ function getReach(skill: ISkillPoint): HTMLLIElement {
   const liText = `<span class='fa-li'><i class="${icon}"></i></span> ${skill.name} (level ${skill.level})`
   li.innerHTML = liText
 
-  const status = kel("span", "status")
-  li.append(status)
-
   if (isDone) {
     li.classList.add("done")
-    status.innerHTML = " -- achieved"
   } else {
     const skills = detail_skills.exp_level
 
+    const status = kel("span", "status")
+
     status.innerHTML = ` -- need `
+
+    li.append(status)
 
     if (skill.level < 9) {
       const nextExp = skills[skill.level] - skill.exp
@@ -85,21 +86,8 @@ function getReach(skill: ISkillPoint): HTMLLIElement {
   return li
 }
 
-function skillCard(player: IPlayer): HTMLDivElement {
+function skillCard(player: IPlayer, skills: ISkillPoint[]): HTMLDivElement {
   const name = player.name
-
-  const skills: ISkillPoint[] = player.experiencePoints.map((exp, i) => {
-    const levels = detail_skills.exp_level
-
-    let levelIndex = levels.findIndex((lv) => exp < lv)
-    if (levelIndex <= -1) levelIndex = levels.length
-
-    return {
-      name: detail_skills.skills[i],
-      level: levelIndex,
-      exp
-    }
-  })
 
   const farmerLevel = getFarmerLevel(skills)
   const farmerTitle = getFarmerTitle(farmerLevel, player.gender)
@@ -124,7 +112,7 @@ function skillCard(player: IPlayer): HTMLDivElement {
 
   const ul = kel("ul", "fa-ul", { e: [descTitle, descResult, achieveCard] })
 
-  const card = kel("div", "card", { e: ul })
+  const card = kel("div", "card", { e: ul, a: { id: `data-skills-${player.umid}` } })
   return card
 }
 
@@ -133,20 +121,45 @@ export default class Skills implements PrimarySection {
 
   private el: HTMLElement = kel("section", "sect skills", { a: { id: "data-skills" } })
 
+  private skillsMaxed: IMaxedSkills = {}
+
+  private btnShowHide?: HTMLDivElement
+
   constructor(private data: IPlayer[]) {}
 
   createElement(): void {
-    const showHide = this.showHide()
+    this.btnShowHide = this.showHide()
 
-    const title = kel("div", "title", { e: ['<h2><i class="fa-duotone fa-hashtag fa-fw"></i> Skills</h2>', showHide] })
+    const title = kel("div", "title", { e: ['<h2><i class="fa-duotone fa-hashtag fa-fw"></i> Skills</h2>', this.btnShowHide] })
 
     const field = kel("div", "field")
 
     this.data.forEach((player) => {
-      field.append(skillCard(player))
+      const skills: ISkillPoint[] = player.experiencePoints.map((exp, i) => {
+        const levels = detail_skills.exp_level
+
+        let levelIndex = levels.findIndex((lv) => exp < lv)
+        if (levelIndex <= -1) levelIndex = levels.length
+
+        return {
+          name: detail_skills.skills[i],
+          level: levelIndex,
+          exp
+        }
+      })
+
+      this.skillsMaxed[player.umid] = skills.filter((skill) => skill.level >= 10).length
+
+      field.append(skillCard(player, skills))
     })
 
     this.el.append(title, field)
+  }
+
+  forceShow(): void {
+    if (this.el.classList.contains("hide") && this.btnShowHide) {
+      this.btnShowHide.click()
+    }
   }
 
   showHide(): HTMLDivElement {
@@ -164,6 +177,10 @@ export default class Skills implements PrimarySection {
     }
 
     return btnShowHide
+  }
+
+  getMaxedSkills(multiplayerId: string): number {
+    return this.skillsMaxed[multiplayerId]
   }
 
   destroy(): void {

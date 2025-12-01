@@ -1,0 +1,4 @@
+{
+  "skills": ["Farming", "Fishing", "Foraging", "Mining", "Combat"],
+  "exp_level": [0, 10000, 25000, 45000, 70000, 100000]
+}

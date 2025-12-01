@@ -3,6 +3,7 @@ import Farmer from "./Farmer"
 import Summary from "./Summary"
 import Money from "./Money"
 import Skills from "./Skills"
+import SkillMastery from "./SkillMastery"
 
 export type ISection = {
   home: Home | null
@@ -10,6 +11,7 @@ export type ISection = {
   summary: Summary | null
   money: Money | null
   skills: Skills | null
+  skillMastery: SkillMastery | null
 }
 
 export const sections: ISection = {
@@ -17,5 +19,6 @@ export const sections: ISection = {
   farmer: null,
   summary: null,
   money: null,
-  skills: null
+  skills: null,
+  skillMastery: null
 }

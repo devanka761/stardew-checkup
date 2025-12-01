@@ -1,6 +1,8 @@
 import { IKeyValueList, IPlayer, ISpriteValue, ISpriteValues } from "../types/player.types"
+import detail_skills from "../../json/sdvDetail/detail_skills.json"
 
 interface IIdentity {
+  umid: (data: ISival) => ISival
   name: (data: ISival) => ISival
   playTime: (data: ISival) => ISival
   gender: (data: ISival) => ISival
@@ -11,6 +13,8 @@ interface IIdentity {
   monstersKilled: (data: ISival) => ISival
   friendship: (data: ISival) => ISival
   experiencePoints: (data: ISival) => ISival
+  masteryExp: (data: ISival) => ISival
+  masteryPerks: (data: ISival) => ISival
   stardrops: (data: ISival) => ISival
   recipesCooked: (data: ISival) => ISival
   craftingRecipes: (data: ISival) => ISival
@@ -54,8 +58,12 @@ function transformSprite(curPlayerData: ISival, newPlayerData: ISival): ISpriteV
 }
 
 const identity: IIdentity = {
+  umid(data): string {
+    return data.UniqueMultiplayerID.toString()
+  },
+
   name(data): string {
-    return data.name || "Unnamed"
+    return data.name?.length >= 1 ? data.name : "Unnamed"
   },
 
   playTime(data): number {
@@ -63,11 +71,11 @@ const identity: IIdentity = {
   },
 
   gender(data): string {
-    return data.Gender || "Male"
+    return data.Gender?.length >= 1 ? data.Gender : "Male"
   },
 
   totalMoneyEarned(data): number {
-    return data.totalMoneyEarned
+    return Number(data.totalMoneyEarned)
   },
 
   individualMoneyEarned(data): number {
@@ -82,7 +90,7 @@ const identity: IIdentity = {
     if (obj?.key?.string?.toString() === "individualMoneyEarned") {
       if (obj?.value) {
         const anyValue = Object.values(obj.value)[0]
-        if (anyValue) return anyValue as number
+        if (typeof anyValue !== "undefined") return anyValue as number
       }
     }
 
@@ -91,7 +99,7 @@ const identity: IIdentity = {
 
       if (item?.value) {
         const anyValue = Object.values(item.value)[0]
-        if (anyValue) return anyValue as number
+        if (typeof anyValue !== "undefined") return anyValue as number
       }
     }
 
@@ -99,7 +107,7 @@ const identity: IIdentity = {
   },
 
   spouse(data): string | null {
-    return data.spouse || null
+    return data.spouse?.length >= 1 ? data.spouse : null
   },
 
   basicShipped(data): IKeyValueList {
@@ -165,6 +173,70 @@ const identity: IIdentity = {
     }
 
     return [0, 0, 0, 0, 0, 0]
+  },
+
+  masteryExp(data): number {
+    const oldObj = data.stats?.MasteryExp
+
+    if (typeof oldObj === "number") {
+      return data.stats.MasteryExp
+    }
+
+    const obj = data.stats?.Values?.item || {}
+
+    if (obj?.key?.string?.toString() === "MasteryExp") {
+      if (obj?.value) {
+        const anyValue = Object.values(obj.value)[0]
+        if (typeof anyValue !== "undefined") return anyValue as number
+      }
+    }
+
+    if (Array.isArray(obj)) {
+      const item = obj.find((itm) => itm.key?.string?.toString() === "MasteryExp")
+
+      if (item?.value) {
+        const anyValue = Object.values(item.value)[0]
+        if (typeof anyValue !== "undefined") return anyValue as number
+      }
+    }
+
+    return 0
+  },
+
+  masteryPerks(data): string[] {
+    const skills = detail_skills.skills
+
+    const perks: string[] = []
+
+    for (let i = 0; i < skills.length; i++) {
+      const perkId = `mastery_${i}`
+
+      const oldObj = data.stats?.[perkId]
+
+      if (typeof oldObj === "number" && oldObj >= 1) {
+        perks.push(perkId)
+      }
+
+      const obj = data.stats?.Values?.item || {}
+
+      if (obj?.key?.string?.toString() === perkId) {
+        if (obj?.value) {
+          const anyValue = Object.values(obj.value)[0]
+          if (anyValue) perks.push(perkId)
+        }
+      }
+
+      if (Array.isArray(obj)) {
+        const item = obj.find((itm) => itm.key?.string?.toString() === perkId)
+
+        if (item?.value) {
+          const anyValue = Object.values(item.value)[0]
+          if (anyValue) perks.push(perkId)
+        }
+      }
+    }
+
+    return perks
   },
 
   stardrops(data): string[] {
@@ -251,12 +323,12 @@ const identity: IIdentity = {
     return transformSprite(data, playerSprite)
   },
 
-  ceremonySeen(data): string | undefined {
-    if (!data.previousActiveDialogueEvents || !data.previousActiveDialogueEvents.item || !Array.isArray(data.previousActiveDialogueEvents.item) || data.previousActiveDialogueEvents.item.length < 1) return undefined
+  ceremonySeen(data): string | null {
+    if (!data.previousActiveDialogueEvents || !data.previousActiveDialogueEvents.item || !Array.isArray(data.previousActiveDialogueEvents.item) || data.previousActiveDialogueEvents.item.length < 1) return null
     return (
       data.previousActiveDialogueEvents?.item?.find((itm: ISival) => {
         return ["eventSeen_502261", "eventSeen_191393"].find((evt) => evt === (itm.key?.string || "-"))
-      })?.key?.string || undefined
+      })?.key?.string || null
     )
   }
 }
@@ -264,23 +336,30 @@ const identity: IIdentity = {
 import { ISival } from "../types/lib.types"
 
 export function getPlayers(players: ISival[]): IPlayer[] {
-  return players.map((player) => ({
-    isHost: !!player.isHost,
-    name: identity.name(player),
-    playTime: identity.playTime(player),
-    gender: identity.gender(player),
-    totalMoneyEarned: identity.totalMoneyEarned(player),
-    individualMoneyEarned: identity.individualMoneyEarned(player),
-    spouse: identity.spouse(player),
-    basicShipped: identity.basicShipped(player),
-    monstersKilled: identity.monstersKilled(player),
-    friendship: identity.friendship(player),
-    experiencePoints: identity.experiencePoints(player),
-    stardrops: identity.stardrops(player),
-    recipesCooked: identity.recipesCooked(player),
-    craftingRecipes: identity.craftingRecipes(player),
-    fishCaught: identity.fishCaught(player),
-    sprite: identity.sprite(player),
-    ceremonySeen: identity.ceremonySeen(player)
-  }))
+  return players
+    .filter((player, i) => {
+      return i === 0 || (player.userID?.toString().length >= 1 && player.name?.toString().length >= 1)
+    })
+    .map((player) => ({
+      isHost: !!player.isHost,
+      umid: identity.umid(player),
+      name: identity.name(player),
+      playTime: identity.playTime(player),
+      gender: identity.gender(player),
+      totalMoneyEarned: identity.totalMoneyEarned(player),
+      individualMoneyEarned: identity.individualMoneyEarned(player),
+      spouse: identity.spouse(player),
+      basicShipped: identity.basicShipped(player),
+      monstersKilled: identity.monstersKilled(player),
+      friendship: identity.friendship(player),
+      experiencePoints: identity.experiencePoints(player),
+      masteryExp: identity.masteryExp(player),
+      masteryPerks: identity.masteryPerks(player),
+      stardrops: identity.stardrops(player),
+      recipesCooked: identity.recipesCooked(player),
+      craftingRecipes: identity.craftingRecipes(player),
+      fishCaught: identity.fishCaught(player),
+      sprite: identity.sprite(player),
+      ceremonySeen: identity.ceremonySeen(player)
+    }))
 }

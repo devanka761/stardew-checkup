@@ -17,7 +17,7 @@ export function readSaveFile(file: ISival): ISaveFile {
   if (!converted.SaveGame) return { ok: false }
 
   const saveGame = converted.SaveGame
-  // console.log(saveGame)
+  // console.log(saveGame.player.stats.Values)
 
   if (!saveGame.player) return { ok: false }
 

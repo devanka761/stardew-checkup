@@ -22,6 +22,7 @@ export interface ISprite {
 
 export interface IPlayer {
   isHost: boolean
+  umid: string
   name: string
   playTime: number
   gender: string
@@ -32,6 +33,8 @@ export interface IPlayer {
   monstersKilled: IKeyValueList
   friendship: IKeyValueList
   experiencePoints: number[]
+  masteryExp: number
+  masteryPerks: string[]
   stardrops: string[]
   recipesCooked: IKeyValueList
   craftingRecipes: IKeyValueList

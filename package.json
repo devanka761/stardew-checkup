@@ -1,6 +1,6 @@
 {
   "name": "stardewcheckup",
-  "version": "1.0.0-wip.4",
+  "version": "1.0.0-wip.5",
   "description": "",
   "main": "dist/app.js",
   "scripts": {
@@ -11,7 +11,6 @@
     "sass": "sass --watch ./src/sass/app.scss ./dist/bundle/app.css --style compressed",
     "format": "prettier --write .",
     "check": "prettier --check .",
-    "type-check": "tsgo -p . --pretty --noEmit",
     "lint": "eslint --ext ts --ext js",
     "up:patch": "npm --no-git-tag-version version patch",
     "up:minor": "npm --no-git-tag-version version minor",
@@ -45,7 +44,6 @@
     "@babel/preset-typescript": "^7.28.5",
     "@eslint/js": "^9.39.1",
     "@types/node": "^24.10.1",
-    "@typescript/native-preview": "^7.0.0-dev.20251121.1",
     "babel-loader": "^10.0.0",
     "clean-webpack-plugin": "^4.0.0",
     "css-loader": "^7.1.2",
