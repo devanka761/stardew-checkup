@@ -101,6 +101,15 @@
         background-color: v.$pm2;
         // color: v.$white;
         text-decoration: none;
+        &.golden {
+          display: inline-block;
+          border: none;
+          background-color: v.$pg2;
+          color: v.$pg1;
+          font-weight: 600;
+          background-size: 100% 100%;
+          background-position: center;
+        }
       }
     }
   }

@@ -4,6 +4,7 @@ import { eroot, futor, kel } from "../lib/kel"
 import { sections } from "./SectionManager"
 import { IPlayer } from "../types/player.types"
 import { toCommas } from "../lib/toCommas"
+import { toAnchor } from "../lib/toAnchor"
 
 function getMaxedSkills(player: IPlayer, maxCount: number): HTMLLIElement {
   const li = kel("li", "goal")
@@ -22,7 +23,12 @@ function getMaxedSkills(player: IPlayer, maxCount: number): HTMLLIElement {
     const status = kel("span", "status")
     li.append(status)
 
-    status.innerHTML = ` -- need ${detail_skill_mastery.skills.length - maxCount} more maxed skill <a href="#data-skills-${player.umid}" scroll="1">#Skills/${player.name}</a>`
+    const anchor = toAnchor(`#Skills/${player.name}`, `data-skills-${player.umid}`, {
+      scroll: true,
+      asText: true
+    })
+
+    status.innerHTML = ` -- ${anchor} - need ${detail_skill_mastery.skills.length - maxCount} more maxed skill`
 
     const a = futor("a", status) as HTMLAnchorElement
     a.onclick = (e) => {
@@ -125,7 +131,14 @@ function getAcquirePerks(perks: string[]): HTMLUListElement {
     const isDone = perks.some((perk) => perk === `mastery_${i}`)
 
     const icon = `fa-duotone fa-solid fa-circle-${isDone ? "check" : "xmark"} fa-fw`
-    const liText = `<span class='fa-li'><i class="${icon}"></i></span> ${skill}`
+
+    const anchor = toAnchor(`${skill} Mastery`, "https://stardewvalleywiki.com/Mastery_Cave#Masteries", {
+      asText: true,
+      blank: true,
+      className: "cc"
+    })
+
+    const liText = `<span class='fa-li'><i class="${icon}"></i></span> ${anchor}`
     li.innerHTML = liText
 
     if (isDone) {
@@ -148,7 +161,7 @@ function getAcquirePerks(perks: string[]): HTMLUListElement {
 export default class SkillMastery implements PrimarySection {
   readonly id: string = "skillmastery"
 
-  private el: HTMLElement = kel("section", "sect skill-mastery", { a: { id: "data-skill-mastery" } })
+  private el: HTMLElement = kel("section", "sect content skill-mastery", { a: { id: "data-skill-mastery" } })
 
   constructor(private data: IPlayer[]) {}
 
@@ -167,34 +180,38 @@ export default class SkillMastery implements PrimarySection {
       const countMaxSkills = sections.skills?.getMaxedSkills(player.umid) || 0
 
       const infoMaxedSkill = kel("li")
-      infoMaxedSkill.innerHTML = `<span class="fa-li"><i class="fa-duotone fa-light fa-candle-holder"></i></span> ${player.name} has maxed ${countMaxSkills} of ${detail_skill_mastery.skills.length} skills`
+      infoMaxedSkill.innerHTML = `<span class="fa-li"><i class="fa-duotone fa-light fa-candle-holder"></i></span> <b>${player.name}</b> has maxed ${countMaxSkills} of ${detail_skill_mastery.skills.length} skills`
 
       const ulMaxedSkill = kel("ul", "fa-ul")
+      const ulMaxedSkillParent = kel("li", null, { e: ulMaxedSkill })
 
       const liMaxedSkill = getMaxedSkills(player, countMaxSkills)
       ulMaxedSkill.append(liMaxedSkill)
 
       const infoMasteryXp = kel("li")
-      infoMasteryXp.innerHTML = `<span class="fa-li"><i class="fa-duotone fa-light fa-candle-holder"></i></span> ${player.name} has ${toCommas(player.masteryExp)} mastery xp`
+      infoMasteryXp.innerHTML = `<span class="fa-li"><i class="fa-duotone fa-light fa-candle-holder"></i></span> <b>${player.name}</b> has ${toCommas(player.masteryExp)} mastery xp`
 
       const ulMasteryXp = kel("ul", "fa-ul")
+      const ulMasteryXpParent = kel("li", null, { e: ulMasteryXp })
 
       const liMasteryXp = getMasteryXp(player.masteryExp)
 
       ulMasteryXp.append(liMasteryXp)
 
       const infoMasteryPerks = kel("li")
-      infoMasteryPerks.innerHTML = `<span class="fa-li"><i class="fa-duotone fa-light fa-candle-holder"></i></span> ${player.name} has selected ${player.masteryPerks.length} of ${detail_skill_mastery.skills.length} mastery perks`
+      infoMasteryPerks.innerHTML = `<span class="fa-li"><i class="fa-duotone fa-light fa-candle-holder"></i></span> <b>${player.name}</b> has selected ${player.masteryPerks.length} of ${detail_skill_mastery.skills.length} mastery perks`
 
       const ulMasteryPerks = kel("ul", "fa-ul")
+      const ulMasteryPerksParent = kel("li", null, { e: ulMasteryPerks })
 
       const liMasteryPerks = getMasteryPerks(player.masteryPerks)
 
       const ulAcquirePerks = getAcquirePerks(player.masteryPerks)
+      const ulAcquirePerksParent = kel("li", null, { e: ulAcquirePerks })
 
-      ulMasteryPerks.append(liMasteryPerks, ulAcquirePerks)
+      ulMasteryPerks.append(liMasteryPerks, ulAcquirePerksParent)
 
-      ulRoot.append(infoMaxedSkill, ulMaxedSkill, infoMasteryXp, ulMasteryXp, infoMasteryPerks, ulMasteryPerks)
+      ulRoot.append(infoMaxedSkill, ulMaxedSkillParent, infoMasteryXp, ulMasteryXpParent, infoMasteryPerks, ulMasteryPerksParent)
 
       card.append(ulRoot)
 

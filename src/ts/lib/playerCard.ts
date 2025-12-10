@@ -198,7 +198,7 @@ const getCtx: IGetCtx = {
         swidth: dim[itm as keyof typeof dim].x,
         sheight: dim[itm as keyof typeof dim].y,
         dx: (coorOffset.x - dim[itm as keyof typeof dim].x) / 2,
-        dy: 17 + coorOffset.y,
+        dy: 16 + coorOffset.y,
         dwidth: dim[itm as keyof typeof dim].x,
         dheight: dim[itm as keyof typeof dim].y
       }
@@ -232,7 +232,7 @@ const getCtx: IGetCtx = {
     img.onload = () => {
       let parseX = sheet_offset.x,
         parseY = sheet_offset.y
-      const parseCoorY = player.gender === "Male" ? 14 : 16
+      const parseCoorY = player.gender === "Male" ? 15 : 16
       if (data_shirts[itemId as keyof typeof data_shirts]?.canBeDyed) {
         const dyeColor = { R: 255, G: 255, B: 255, A: 255 }
         const attrColor = sk?.clothesColor || { R: 0, G: 0, B: 0, A: 0 }

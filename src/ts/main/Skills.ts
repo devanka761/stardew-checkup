@@ -2,9 +2,9 @@ import detail_skills from "../../json/sdvDetail/detail_skills.json"
 import { PrimarySection } from "../types/section.types"
 import { eroot, kel } from "../lib/kel"
 import { sections } from "./SectionManager"
-// import { toCommas } from "../lib/toCommas"
 import { IPlayer } from "../types/player.types"
 import { toCommas } from "../lib/toCommas"
+import { toAnchor } from "../lib/toAnchor"
 
 interface ISkillPoint {
   name: string
@@ -60,7 +60,13 @@ function getReach(skill: ISkillPoint): HTMLLIElement {
   const isDone = skill.level >= 10
 
   const icon = `fa-duotone fa-solid fa-circle-${isDone ? "check" : "xmark"} fa-fw`
-  const liText = `<span class='fa-li'><i class="${icon}"></i></span> ${skill.name} (level ${skill.level})`
+  const anchor = toAnchor(skill.name, `https://stardewvalleywiki.com/${skill.name}#${skill.name}_Skill`, {
+    asText: true,
+    blank: true,
+    className: "cc"
+  })
+
+  const liText = `<span class='fa-li'><i class="${icon}"></i></span> ${anchor} (level ${skill.level})`
   li.innerHTML = liText
 
   if (isDone) {
@@ -92,25 +98,27 @@ function skillCard(player: IPlayer, skills: ISkillPoint[]): HTMLDivElement {
   const farmerLevel = getFarmerLevel(skills)
   const farmerTitle = getFarmerTitle(farmerLevel, player.gender)
 
-  const titleText = `<span class="fa-li"><i class="fa-duotone fa-light fa-farm fa-fw"></i></span> ${name} is Farmer Level ${farmerLevel} with title ${farmerTitle}`
+  const titleText = `<span class="fa-li"><i class="fa-duotone fa-light fa-farm fa-fw"></i></span> <b>${name}</b> is Farmer Level ${farmerLevel} with title ${farmerTitle}`
   const descTitle = kel("li", "skill-title", { e: titleText })
 
   const level10Count = skills.filter((skill) => skill.level >= 10).length
 
-  const resultText = `<span class="fa-li"><i class="fa-duotone fa-light fa-farm fa-fw"></i></span> ${name} has reached level 10 in ${level10Count} of 5 skills`
+  const resultText = `<span class="fa-li"><i class="fa-duotone fa-light fa-farm fa-fw"></i></span> <b>${name}</b> has reached level 10 in ${level10Count} of 5 skills`
 
   const descResult = kel("li", "skill-result", { e: resultText })
 
   const achieves = detail_skills.achieves.map((achieve) => getAchieve(achieve, level10Count))
 
   const achieveCard = kel("ul", "fa-ul", { e: achieves })
+  const achieveCardParent = kel("li", "skill-detail", { e: achieveCard })
 
   const reaches = skills.filter((skill) => skill.name).map((skill) => getReach(skill))
   const reachedCard = kel("ul", "fa-ul", { e: reaches })
+  const reachedCardParent = kel("li", null, { e: reachedCard })
 
-  achieveCard.append(reachedCard)
+  achieveCard.append(reachedCardParent)
 
-  const ul = kel("ul", "fa-ul", { e: [descTitle, descResult, achieveCard] })
+  const ul = kel("ul", "fa-ul", { e: [descTitle, descResult, achieveCardParent] })
 
   const card = kel("div", "card", { e: ul, a: { id: `data-skills-${player.umid}` } })
   return card
@@ -119,7 +127,7 @@ function skillCard(player: IPlayer, skills: ISkillPoint[]): HTMLDivElement {
 export default class Skills implements PrimarySection {
   readonly id: string = "skills"
 
-  private el: HTMLElement = kel("section", "sect skills", { a: { id: "data-skills" } })
+  private el: HTMLElement = kel("section", "sect content skills", { a: { id: "data-skills" } })
 
   private skillsMaxed: IMaxedSkills = {}
 

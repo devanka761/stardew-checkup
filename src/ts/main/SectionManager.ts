@@ -4,6 +4,8 @@ import Summary from "./Summary"
 import Money from "./Money"
 import Skills from "./Skills"
 import SkillMastery from "./SkillMastery"
+import Quests from "./Quests"
+import SpecialOrders from "./SpecialOrders"
 
 export type ISection = {
   home: Home | null
@@ -12,6 +14,8 @@ export type ISection = {
   money: Money | null
   skills: Skills | null
   skillMastery: SkillMastery | null
+  quests: Quests | null
+  specialOrders: SpecialOrders | null
 }
 
 export const sections: ISection = {
@@ -20,5 +24,7 @@ export const sections: ISection = {
   summary: null,
   money: null,
   skills: null,
-  skillMastery: null
+  skillMastery: null,
+  quests: null,
+  specialOrders: null
 }

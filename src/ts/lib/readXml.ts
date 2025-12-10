@@ -17,7 +17,7 @@ export function readSaveFile(file: ISival): ISaveFile {
   if (!converted.SaveGame) return { ok: false }
 
   const saveGame = converted.SaveGame
-  // console.log(saveGame.player.stats.Values)
+  // console.log(saveGame)
 
   if (!saveGame.player) return { ok: false }
 
@@ -27,6 +27,12 @@ export function readSaveFile(file: ISival): ISaveFile {
   const whichFarm = farmType[saveGame.whichFarm as keyof typeof farmType]
   if (!whichFarm) return { ok: false }
   const separateWallets = !!saveGame.player.useSeparateWallets
+  const completedSpecialOrders: string[] = []
+  const specialOrders = saveGame.completedSpecialOrders?.string
+
+  if (Array.isArray(specialOrders)) {
+    completedSpecialOrders.push(...specialOrders)
+  }
 
   const year = saveGame.year
   if (typeof year !== "number") return { ok: false }
@@ -48,6 +54,7 @@ export function readSaveFile(file: ISival): ISaveFile {
     players,
     farmName,
     separateWallets,
+    completedSpecialOrders,
     whichFarm,
     year,
     dayOfMonth,

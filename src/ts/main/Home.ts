@@ -12,6 +12,8 @@ import Summary from "./Summary"
 import { isValidGameVersion, minVersion } from "../parser/gameVersion"
 import Skills from "./Skills"
 import SkillMastery from "./SkillMastery"
+import Quests from "./Quests"
+import SpecialOrders from "./SpecialOrders"
 
 export default class Home implements PrimarySection {
   readonly id: string = "home"
@@ -125,6 +127,8 @@ export default class Home implements PrimarySection {
     new Money(saveData).init()
     new Skills(saveData.players).init()
     new SkillMastery(saveData.players).init()
+    new Quests(saveData.players).init()
+    new SpecialOrders(saveData).init()
   }
 
   private createNote(): HTMLDivElement {
@@ -135,13 +139,13 @@ export default class Home implements PrimarySection {
 
     <ul class="fa-ul">
       <li>
-        <span class="fa-li"> <i class="fa-duotone fa-light fa-hand-point-right"></i> </span>Windows: <span class="mono">%AppData%\\StardewValley\\Saves\\</span>
+        <span class="fa-li"> <i class="fa-duotone fa-light fa-hand-point-right"></i> </span>Windows: <span class="mono perletter">%AppData%\\StardewValley\\Saves\\</span>
       </li>
       <li>
-        <span class="fa-li"> <i class="fa-duotone fa-light fa-hand-point-right"></i> </span>Mac OSX & Linux: <span class="mono">~/.config/StardewValley/Saves/</span>
+        <span class="fa-li"> <i class="fa-duotone fa-light fa-hand-point-right"></i> </span>Mac OSX & Linux: <span class="mono perletter">~/.config/StardewValley/Saves/</span>
       </li>
       <li>
-        <span class="fa-li"> <i class="fa-duotone fa-light fa-hand-point-right"></i> </span>Proton Steam (Ubuntu): <span class="mono">~/.steam/debian-installation/steamapps/compatdata/413150/pfx/drive_c/users/steamuser/AppData/Roaming/StardewValley/Saves/</span>
+        <span class="fa-li"> <i class="fa-duotone fa-light fa-hand-point-right"></i> </span>Proton Steam (Ubuntu): <span class="mono perletter">~/.steam/debian-installation/steamapps/compatdata/413150/pfx/drive_c/users/steamuser/AppData/Roaming/StardewValley/Saves/</span>
       </li>
     </ul>`
     return quickNote
@@ -154,20 +158,20 @@ export default class Home implements PrimarySection {
     <div class="quick-actions">
       <a scroll="1" href="#data-summary">Summary</a>
       <a scroll="1" href="#data-farmer">Farmer</a>
-      <a scroll="1" href="#data-perfection-tracker">Perfection Tracker</a>
+      <a scroll="1" href="#data-perfection-tracker" class="golden">Perfection Tracker</a>
       <a scroll="1" href="#data-money">Money</a>
-      <a scroll="1" href="#data-skills">Skills</a>
+      <a scroll="1" href="#data-skills" class="golden">Skills</a>
       <a scroll="1" href="#data-skill-mastery">Skill Mastery</a>
       <a scroll="1" href="#data-quests">Quests</a>
       <a scroll="1" href="#data-special-orders">Special Orders</a>
-      <a scroll="1" href="#data-monster-hunting">Monster Hunting</a>
-      <a scroll="1" href="#data-stardrops">Stardrops</a>
+      <a scroll="1" href="#data-monster-hunting" class="golden">Monster Hunting</a>
+      <a scroll="1" href="#data-stardrops" class="golden">Stardrops</a>
       <a scroll="1" href="#data-home-family">Home and Family</a>
-      <a scroll="1" href="#data-social">Social</a>
-      <a scroll="1" href="#data-cooking">Cooking</a>
-      <a scroll="1" href="#data-crafting">Crafting</a>
-      <a scroll="1" href="#data-fishing">Fishing</a>
-      <a scroll="1" href="#data-basic-shipping">Basic Shipping</a>
+      <a scroll="1" href="#data-social" class="golden">Social</a>
+      <a scroll="1" href="#data-cooking" class="golden">Cooking</a>
+      <a scroll="1" href="#data-crafting" class="golden">Crafting</a>
+      <a scroll="1" href="#data-fishing" class="golden">Fishing</a>
+      <a scroll="1" href="#data-basic-shipping" class="golden">Basic Shipping</a>
       <a scroll="1" href="#data-crop-shipping">Crop Shipping</a>
       <a scroll="1" href="#data-books-items-powers">Book, Special Items, and Powers</a>
       <a scroll="1" href="#data-museum-collection">Museum Collection</a>
@@ -176,7 +180,7 @@ export default class Home implements PrimarySection {
       <a scroll="1" href="#data-community-center">Community Center / Joja Community Development</a>
       <a scroll="1" href="#data-forest-neighbors">Forest Neighbors</a>
       <a scroll="1" href="#data-granpas-evaluation">Grandpa's Evaluation</a>
-      <a scroll="1" href="#data-golden-walnuts">Golden Walnuts</a>
+      <a scroll="1" href="#data-golden-walnuts" class="golden">Golden Walnuts</a>
       <a scroll="1" href="#data-island-upgrades">Island Upgrades</a>
       <a scroll="1" href="#data-arcade-games">Arcade Games</a>
       <a scroll="1" href="#data-animal-summary">Animal Summary</a>

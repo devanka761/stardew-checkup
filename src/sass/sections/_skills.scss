@@ -1,22 +1,26 @@
 @use "../variables" as v;
 
-.skills {
+.content {
   background-color: v.$px1;
   .field {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: start;
+    max-width: 2560px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(600px, 1fr));
     gap: v.$bigPadding;
     margin-bottom: v.$bigPadding;
     .card {
-      display: block;
+      display: grid;
+      grid-template-rows: subgrid;
+      grid-row: span 1;
+      gap: 0;
       padding: v.$bigPadding;
       background-color: v.$px2;
       border-radius: 10px;
       ul {
         li {
           line-height: 1.75;
+          text-align: left;
           &.goal {
             color: v.$cred;
             .status {
@@ -32,6 +36,28 @@
             }
           }
         }
+      }
+    }
+  }
+}
+
+@media (max-width: 666px) {
+  .content {
+    .field {
+      max-width: 100%;
+      margin: 0 0;
+      display: grid;
+      grid-template-columns: 1fr;
+
+      gap: v.$bigPadding;
+      margin-bottom: v.$bigPadding;
+      .card {
+        width: 100%;
+        background-color: orange;
+        display: block;
+        padding: v.$bigPadding;
+        background-color: v.$px2;
+        border-radius: 10px;
       }
     }
   }

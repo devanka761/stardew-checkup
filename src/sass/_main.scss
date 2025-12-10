@@ -82,6 +82,9 @@ img {
 a,
 a:visited {
   color: v.$pm1;
+  &.cc {
+    color: currentColor;
+  }
 }
 
 .main {
@@ -97,6 +100,24 @@ span.mono {
   border: 1px solid rgba(v.$sgray, 0.5);
   &.red {
     color: v.$cred;
+  }
+  &.perletter {
+    word-break: break-all;
+  }
+}
+
+.fa-ol {
+  margin-left: var(--fa-li-margin, 2rem);
+  li {
+    line-height: 1.5;
+    text-align: justify;
+    text-align-last: left;
+    &:has(.fa-li) {
+      list-style: none;
+      .fa-li {
+        margin-left: var(--fa-li-margin, 2.5rem);
+      }
+    }
   }
 }
 

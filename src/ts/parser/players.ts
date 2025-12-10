@@ -15,6 +15,7 @@ interface IIdentity {
   experiencePoints: (data: ISival) => ISival
   masteryExp: (data: ISival) => ISival
   masteryPerks: (data: ISival) => ISival
+  questsCompleted: (data: ISival) => ISival
   stardrops: (data: ISival) => ISival
   recipesCooked: (data: ISival) => ISival
   craftingRecipes: (data: ISival) => ISival
@@ -238,7 +239,33 @@ const identity: IIdentity = {
 
     return perks
   },
+  questsCompleted(data): number {
+    const oldObj = data.stats?.questsCompleted
 
+    if (typeof oldObj === "number") {
+      return data.stats.questsCompleted
+    }
+
+    const obj = data.stats?.Values?.item || {}
+
+    if (obj?.key?.string?.toString() === "questsCompleted") {
+      if (obj?.value) {
+        const anyValue = Object.values(obj.value)[0]
+        if (typeof anyValue !== "undefined") return anyValue as number
+      }
+    }
+
+    if (Array.isArray(obj)) {
+      const item = obj.find((itm) => itm.key?.string?.toString() === "questsCompleted")
+
+      if (item?.value) {
+        const anyValue = Object.values(item.value)[0]
+        if (typeof anyValue !== "undefined") return anyValue as number
+      }
+    }
+
+    return 0
+  },
   stardrops(data): string[] {
     const items: string[] = []
 
@@ -355,6 +382,7 @@ export function getPlayers(players: ISival[]): IPlayer[] {
       experiencePoints: identity.experiencePoints(player),
       masteryExp: identity.masteryExp(player),
       masteryPerks: identity.masteryPerks(player),
+      questsCompleted: identity.questsCompleted(player),
       stardrops: identity.stardrops(player),
       recipesCooked: identity.recipesCooked(player),
       craftingRecipes: identity.craftingRecipes(player),

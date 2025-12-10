@@ -1,0 +1,12 @@
+[
+  {
+    "id": "Gofer",
+    "name": "Gofer (complete 10 quests)",
+    "min": 10
+  },
+  {
+    "id": "ABigHelp",
+    "name": "A Big Help (complete 40 quests)",
+    "min": 40
+  }
+]

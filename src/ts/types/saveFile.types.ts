@@ -5,6 +5,7 @@ export interface ISaveGame {
   farmName: string
   whichFarm: string
   separateWallets: boolean
+  completedSpecialOrders: string[]
   year: number
   dayOfMonth: number
   currentSeason: string
