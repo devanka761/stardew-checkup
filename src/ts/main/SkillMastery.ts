@@ -6,7 +6,13 @@ import { IPlayer } from "../types/player.types"
 import { toCommas } from "../lib/toCommas"
 import { toAnchor } from "../lib/toAnchor"
 
-function getMaxedSkills(player: IPlayer, maxCount: number): HTMLLIElement {
+interface IMasteryXpCount {
+  next: number
+  max: number
+  last: boolean
+}
+
+function getMasteryCave(player: IPlayer, maxCount: number): HTMLLIElement {
   const li = kel("li", "goal")
 
   const achieveString = "Gain access to the Mastery Cave"
@@ -47,10 +53,21 @@ function getMaxedSkills(player: IPlayer, maxCount: number): HTMLLIElement {
   return li
 }
 
-interface IMasteryXpCount {
-  next: number
-  max: number
-  last: boolean
+function getInfoMaxedSkills(player: IPlayer, maxCount: number): HTMLLIElement {
+  const reqMax = detail_skill_mastery.skills.length
+
+  const li = kel("li")
+  li.innerHTML = `<span class="fa-li"><i class="fa-duotone fa-light fa-candle-holder"></i></span> <b>${player.name}</b> has maxed ${maxCount} of ${reqMax} skills`
+
+  const ulAchieves = kel("ul", "fa-ul")
+
+  const infoMasteryCave = getMasteryCave(player, maxCount)
+
+  ulAchieves.append(infoMasteryCave)
+
+  li.append(ulAchieves)
+
+  return li
 }
 
 function masteryXpCount(xp: number): IMasteryXpCount {
@@ -66,7 +83,7 @@ function masteryXpCount(xp: number): IMasteryXpCount {
   }
 }
 
-function getMasteryXp(xp: number): HTMLLIElement {
+function getMastery100K(xp: number): HTMLLIElement {
   const li = kel("li", "goal")
 
   const achieveString = "Reach 100,000 mastery xp"
@@ -96,36 +113,23 @@ function getMasteryXp(xp: number): HTMLLIElement {
 
   return li
 }
+function getInfoMasteryXP(player: IPlayer): HTMLLIElement {
+  const li = kel("li")
+  li.innerHTML = `<span class="fa-li"><i class="fa-duotone fa-light fa-candle-holder"></i></span> <b>${player.name}</b> has ${toCommas(player.masteryExp)} mastery xp`
 
-function getMasteryPerks(perks: string[]): HTMLLIElement {
-  const li = kel("li", "goal")
+  const ulAchieves = kel("ul", "fa-ul")
 
-  const achieveString = "Acquire all mastery perks"
+  const infoMastery100K = getMastery100K(player.masteryExp)
 
-  const skills = detail_skill_mastery.skills
+  ulAchieves.append(infoMastery100K)
 
-  const isDone = perks.length === skills.length
-
-  const icon = `fa-duotone fa-solid fa-circle-${isDone ? "check" : "xmark"} fa-fw`
-  const liText = `<span class='fa-li'><i class="${icon}"></i></span> ${achieveString}`
-  li.innerHTML = liText
-
-  if (isDone) {
-    li.classList.add("done")
-  } else {
-    const status = kel("span", "status")
-    li.append(status)
-
-    status.innerHTML = ` -- need ${skills.length - perks.length} more`
-  }
+  li.append(ulAchieves)
 
   return li
 }
 
-function getAcquirePerks(perks: string[]): HTMLUListElement {
-  const ul = kel("ul", "fa-ul")
-
-  const skills: HTMLLIElement[] = detail_skill_mastery.skills.map((skill, i) => {
+function getPerksAcquired(perks: string[]): HTMLLIElement[] {
+  const masteryPerks: HTMLLIElement[] = detail_skill_mastery.skills.map((skill, i) => {
     const li = kel("li", "goal")
 
     const isDone = perks.some((perk) => perk === `mastery_${i}`)
@@ -153,9 +157,58 @@ function getAcquirePerks(perks: string[]): HTMLUListElement {
     return li
   })
 
-  ul.append(...skills)
+  return masteryPerks
+}
 
-  return ul
+function getAchievePerks(perks: string[]): HTMLLIElement {
+  const li = kel("li", "goal")
+
+  const achieveString = "Acquire all mastery perks"
+
+  const skills = detail_skill_mastery.skills
+
+  const isDone = perks.length === skills.length
+
+  const icon = `fa-duotone fa-solid fa-circle-${isDone ? "check" : "xmark"} fa-fw`
+  const liText = `<span class='fa-li'><i class="${icon}"></i></span> ${achieveString}`
+  li.innerHTML = liText
+
+  if (isDone) {
+    li.classList.add("done")
+  } else {
+    const status = kel("span", "status")
+    li.append(status)
+
+    status.innerHTML = ` -- need ${skills.length - perks.length} more`
+  }
+
+  const ulPerks = kel("ul", "fa-ul")
+
+  const infoPerksAcquired = getPerksAcquired(perks)
+
+  ulPerks.append(...infoPerksAcquired)
+
+  li.append(ulPerks)
+
+  return li
+}
+
+function getInfoMasteryPerks(player: IPlayer): HTMLLIElement {
+  const reqMax = detail_skill_mastery.skills.length
+  const perks = player.masteryPerks
+
+  const li = kel("li")
+  li.innerHTML = `<span class="fa-li"><i class="fa-duotone fa-light fa-candle-holder"></i></span> <b>${player.name}</b> has selected ${perks.length} of ${reqMax} mastery perks`
+
+  const ulAchieves = kel("ul", "fa-ul")
+
+  const infoAchieve = getAchievePerks(perks)
+
+  ulAchieves.append(infoAchieve)
+
+  li.append(ulAchieves)
+
+  return li
 }
 
 export default class SkillMastery implements PrimarySection {
@@ -177,41 +230,15 @@ export default class SkillMastery implements PrimarySection {
 
       const ulRoot = kel("ul", "fa-ul")
 
-      const countMaxSkills = sections.skills?.getMaxedSkills(player.umid) || 0
+      const maxCount = sections.skills?.getMaxedSkills(player.umid) || 0
 
-      const infoMaxedSkill = kel("li")
-      infoMaxedSkill.innerHTML = `<span class="fa-li"><i class="fa-duotone fa-light fa-candle-holder"></i></span> <b>${player.name}</b> has maxed ${countMaxSkills} of ${detail_skill_mastery.skills.length} skills`
+      const infoMaxedSkill = getInfoMaxedSkills(player, maxCount)
 
-      const ulMaxedSkill = kel("ul", "fa-ul")
-      const ulMaxedSkillParent = kel("li", null, { e: ulMaxedSkill })
+      const infoMasteryXp = getInfoMasteryXP(player)
 
-      const liMaxedSkill = getMaxedSkills(player, countMaxSkills)
-      ulMaxedSkill.append(liMaxedSkill)
+      const infoMasteryPerks = getInfoMasteryPerks(player)
 
-      const infoMasteryXp = kel("li")
-      infoMasteryXp.innerHTML = `<span class="fa-li"><i class="fa-duotone fa-light fa-candle-holder"></i></span> <b>${player.name}</b> has ${toCommas(player.masteryExp)} mastery xp`
-
-      const ulMasteryXp = kel("ul", "fa-ul")
-      const ulMasteryXpParent = kel("li", null, { e: ulMasteryXp })
-
-      const liMasteryXp = getMasteryXp(player.masteryExp)
-
-      ulMasteryXp.append(liMasteryXp)
-
-      const infoMasteryPerks = kel("li")
-      infoMasteryPerks.innerHTML = `<span class="fa-li"><i class="fa-duotone fa-light fa-candle-holder"></i></span> <b>${player.name}</b> has selected ${player.masteryPerks.length} of ${detail_skill_mastery.skills.length} mastery perks`
-
-      const ulMasteryPerks = kel("ul", "fa-ul")
-      const ulMasteryPerksParent = kel("li", null, { e: ulMasteryPerks })
-
-      const liMasteryPerks = getMasteryPerks(player.masteryPerks)
-
-      const ulAcquirePerks = getAcquirePerks(player.masteryPerks)
-      const ulAcquirePerksParent = kel("li", null, { e: ulAcquirePerks })
-
-      ulMasteryPerks.append(liMasteryPerks, ulAcquirePerksParent)
-
-      ulRoot.append(infoMaxedSkill, ulMaxedSkillParent, infoMasteryXp, ulMasteryXpParent, infoMasteryPerks, ulMasteryPerksParent)
+      ulRoot.append(infoMaxedSkill, infoMasteryXp, infoMasteryPerks)
 
       card.append(ulRoot)
 

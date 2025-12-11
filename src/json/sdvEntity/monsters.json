@@ -13,7 +13,7 @@
     "Serpents": 250,
     "Flame Spirits": 150
   },
-  "categories": {
+  "monsters": {
     "Green Slime": "Slimes",
     "Frost Jelly": "Slimes",
     "Sludge": "Slimes",
@@ -45,7 +45,7 @@
     "Iridium Bat": "Bats",
     "Royal Serpent": "Serpents"
   },
-  "monsters": {
+  "cagetories": {
     "Slimes": ["Green Slime", "Frost Jelly", "Sludge", "Tiger Slime"],
     "Void Spirits": ["Shadow Brute", "Shadow Shaman", "Shadow Sniper"],
     "Bats": ["Bat", "Frost Bat", "Lava Bat", "Iridium Bat"],

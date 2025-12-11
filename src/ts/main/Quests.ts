@@ -11,7 +11,7 @@ interface IQuest {
   min: number
 }
 
-function getQuestsCompletion(questCompleted: number): HTMLUListElement {
+function getQuestsCompletion(questCompleted: number): HTMLLIElement[] {
   const n = questCompleted
 
   const quests: IQuest[] = detail_quests
@@ -37,11 +37,21 @@ function getQuestsCompletion(questCompleted: number): HTMLUListElement {
     return li
   })
 
-  const ul = kel("ul", "fa-ul")
+  return completionList
+}
 
-  ul.append(...completionList)
+function getInfoQuestsCompleted(player: IPlayer): HTMLLIElement {
+  const li = kel("li")
+  li.innerHTML = `<span class="fa-li"><i class="fa-duotone fa-light fa-newspaper"></i></span> <b>${player.name}</b> has completed ${toCommas(player.questsCompleted)} "Help Wanted" quest(s)`
 
-  return ul
+  const ulAchieves = kel("ul", "fa-ul")
+
+  const achieves = getQuestsCompletion(player.questsCompleted)
+  ulAchieves.append(...achieves)
+
+  li.append(ulAchieves)
+
+  return li
 }
 
 export default class Quests implements PrimarySection {
@@ -63,13 +73,9 @@ export default class Quests implements PrimarySection {
 
       const ulRoot = kel("ul", "fa-ul")
 
-      const infoQuests = kel("li")
-      infoQuests.innerHTML = `<span class="fa-li"><i class="fa-duotone fa-light fa-newspaper"></i></span> <b>${player.name}</b> has completed ${toCommas(player.questsCompleted)} "Help Wanted" quest(s)`
+      const infoQuestsCompleted = getInfoQuestsCompleted(player)
 
-      const ulCompletion = getQuestsCompletion(player.questsCompleted)
-      const ulCompletionParent = kel("li", null, { e: ulCompletion })
-
-      ulRoot.append(infoQuests, ulCompletionParent)
+      ulRoot.append(infoQuestsCompleted)
 
       card.append(ulRoot)
 

@@ -14,6 +14,7 @@ import Skills from "./Skills"
 import SkillMastery from "./SkillMastery"
 import Quests from "./Quests"
 import SpecialOrders from "./SpecialOrders"
+import MonsterHunting from "./MonsterHunting"
 
 export default class Home implements PrimarySection {
   readonly id: string = "home"
@@ -129,6 +130,7 @@ export default class Home implements PrimarySection {
     new SkillMastery(saveData.players).init()
     new Quests(saveData.players).init()
     new SpecialOrders(saveData).init()
+    new MonsterHunting(saveData.players).init()
   }
 
   private createNote(): HTMLDivElement {

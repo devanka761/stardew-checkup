@@ -6,7 +6,7 @@ import { IPlayer } from "../types/player.types"
 import { ISaveGame } from "../types/saveFile.types"
 import { toAnchor } from "../lib/toAnchor"
 
-function getRemaining(quests: string[]): HTMLOListElement {
+function getProgressRemaining(quests: string[]): HTMLLIElement[] {
   const questsReq = Object.keys(detail_special_orders.town)
 
   const questsRemain = questsReq.filter((townQuest) => !quests.find((quest) => quest === townQuest)).map((quest) => detail_special_orders.town[quest as keyof typeof detail_special_orders.town])
@@ -22,14 +22,10 @@ function getRemaining(quests: string[]): HTMLOListElement {
     return li
   })
 
-  const ol = kel("ol", "fa-ol")
-
-  ol.append(...questList)
-
-  return ol
+  return questList
 }
 
-function getCompleted(quests: string[]): HTMLUListElement {
+function getProgressCompleted(quests: string[]): HTMLLIElement[] {
   const questsReq = Object.keys(detail_special_orders.town)
 
   const questCompleted = questsReq.filter((townQuest) => quests.find((quest) => quest === townQuest)).map((quest) => detail_special_orders.town[quest as keyof typeof detail_special_orders.town])
@@ -49,14 +45,10 @@ function getCompleted(quests: string[]): HTMLUListElement {
     return li
   })
 
-  const ul = kel("ul", "fa-ul")
-
-  ul.append(...questList)
-
-  return ul
+  return questList
 }
 
-function getCompletionSpecialOrders(quests: string[]): HTMLUListElement {
+function getSpecialOrdersCompletion(quests: string[]): HTMLLIElement {
   const doneQuestReq = Object.keys(detail_special_orders.town).length
 
   const isDone = quests.length >= doneQuestReq
@@ -74,21 +66,42 @@ function getCompletionSpecialOrders(quests: string[]): HTMLUListElement {
     status.innerHTML = ` -- need ${doneQuestReq - quests.length} more`
   }
 
-  const olRemaining = getRemaining(quests)
-  const olRemainingParent = kel("li", null, { e: olRemaining })
+  const olProgress = kel("ol", "fa-ol")
 
-  const ulCompleted = getCompleted(quests)
-  const ulCompletedParent = kel("li", null, { e: ulCompleted })
+  const progressRemaining = getProgressRemaining(quests)
+  if (progressRemaining.length >= 1) olProgress.append(...progressRemaining)
+  const progressCompleted = getProgressCompleted(quests)
+  if (progressCompleted.length >= 1) olProgress.append(...progressCompleted)
 
-  li.append(olRemainingParent, ulCompletedParent)
+  li.append(olProgress)
 
-  const ul = kel("ul", "fa-ul")
-
-  ul.append(li)
-
-  return ul
+  return li
 }
 
+function getInfoSpecialOrdersCompleted(farmName: string, players: IPlayer[], quests: string[]): HTMLLIElement {
+  const doneNumber = quests.length
+  const reqNumber = Object.keys(detail_special_orders.town).length
+
+  const li = kel("li")
+
+  li.innerHTML = '<span class="fa-li"><i class="fa-duotone fa-light fa-newspaper"></i></span> '
+
+  if (players.length > 1) {
+    li.innerHTML += `Inhabitants of <b>${farmName} Farm</b> have completed ${doneNumber} of ${reqNumber} town special orders`
+  } else {
+    const player = players[0]
+    li.innerHTML += `<b>${player.name}</b> has completed ${doneNumber} of ${reqNumber} town special orders`
+  }
+
+  const ulAchieve = kel("ul", "fa-ul")
+
+  const achieve = getSpecialOrdersCompletion(quests)
+  ulAchieve.append(achieve)
+
+  li.append(ulAchieve)
+
+  return li
+}
 export default class SpecialOrders implements PrimarySection {
   readonly id: string = "special-orders"
 
@@ -117,23 +130,9 @@ export default class SpecialOrders implements PrimarySection {
     const card = kel("div", "card")
     const ulRoot = kel("ul", "fa-ul")
 
-    const infoSpecialOrders = kel("li")
-    infoSpecialOrders.innerHTML = '<span class="fa-li"><i class="fa-duotone fa-light fa-newspaper"></i></span> '
+    const infoSpecialOrdersCompleted = getInfoSpecialOrdersCompleted(this.farmName, this.players, this.quests)
 
-    const doneNumber = this.quests.length
-    const reqNumber = Object.keys(detail_special_orders.town).length
-
-    if (this.players.length > 1) {
-      infoSpecialOrders.innerHTML += `Inhabitants of <b>${this.farmName} Farm</b> has completed ${doneNumber} of ${reqNumber} town special orders`
-    } else {
-      const player = this.players[0]
-      infoSpecialOrders.innerHTML += `<b>${player.name}</b> has completed ${doneNumber} of ${reqNumber} town special orders`
-    }
-
-    const ulCompletion = getCompletionSpecialOrders(this.quests)
-    const ulCompletionParent = kel("li", null, { e: ulCompletion })
-
-    ulRoot.append(infoSpecialOrders, ulCompletionParent)
+    ulRoot.append(infoSpecialOrdersCompleted)
 
     card.append(ulRoot)
 

@@ -20,6 +20,11 @@ export interface ISprite {
   pantsItem?: { itemId: string | number; clothesColor: { R: number; G: number; B: number; A: number } }
 }
 
+export interface IMineLevel {
+  mine: number
+  skullCavern: number
+}
+
 export interface IPlayer {
   isHost: boolean
   umid: string
@@ -30,6 +35,7 @@ export interface IPlayer {
   individualMoneyEarned: number
   spouse: string
   basicShipped: IKeyValueList
+  deepestMineLevel: IMineLevel
   monstersKilled: IKeyValueList
   friendship: IKeyValueList
   experiencePoints: number[]

@@ -1,4 +1,4 @@
-import { IKeyValueList, IPlayer, ISpriteValue, ISpriteValues } from "../types/player.types"
+import { IKeyValueList, IMineLevel, IPlayer, ISpriteValue, ISpriteValues } from "../types/player.types"
 import detail_skills from "../../json/sdvDetail/detail_skills.json"
 
 interface IIdentity {
@@ -10,6 +10,7 @@ interface IIdentity {
   individualMoneyEarned: (data: ISival) => ISival
   spouse: (data: ISival) => ISival
   basicShipped: (data: ISival) => ISival
+  deepestMineLevel: (data: ISival) => ISival
   monstersKilled: (data: ISival) => ISival
   friendship: (data: ISival) => ISival
   experiencePoints: (data: ISival) => ISival
@@ -127,6 +128,21 @@ const identity: IIdentity = {
     }
 
     return items
+  },
+
+  deepestMineLevel(data): IMineLevel {
+    const hasSkullKey = data.hasSkullKey?.toString() === "true" ? true : false
+
+    let mineLevel = typeof data.deepestMineLevel === "number" ? data.deepestMineLevel : 0
+
+    if (hasSkullKey) {
+      mineLevel = Math.max(120, mineLevel)
+    }
+
+    return {
+      mine: Math.min(mineLevel, 120),
+      skullCavern: mineLevel > 120 ? mineLevel - 120 : 0
+    }
   },
 
   monstersKilled(data): IKeyValueList {
@@ -377,6 +393,7 @@ export function getPlayers(players: ISival[]): IPlayer[] {
       individualMoneyEarned: identity.individualMoneyEarned(player),
       spouse: identity.spouse(player),
       basicShipped: identity.basicShipped(player),
+      deepestMineLevel: identity.deepestMineLevel(player),
       monstersKilled: identity.monstersKilled(player),
       friendship: identity.friendship(player),
       experiencePoints: identity.experiencePoints(player),

@@ -92,33 +92,56 @@ function getReach(skill: ISkillPoint): HTMLLIElement {
   return li
 }
 
-function skillCard(player: IPlayer, skills: ISkillPoint[]): HTMLDivElement {
+function getInfoFarmerTitle(player: IPlayer, skills: ISkillPoint[]): HTMLLIElement {
   const name = player.name
 
   const farmerLevel = getFarmerLevel(skills)
   const farmerTitle = getFarmerTitle(farmerLevel, player.gender)
 
-  const titleText = `<span class="fa-li"><i class="fa-duotone fa-light fa-farm fa-fw"></i></span> <b>${name}</b> is Farmer Level ${farmerLevel} with title ${farmerTitle}`
-  const descTitle = kel("li", "skill-title", { e: titleText })
+  const li = kel("li")
+  li.innerHTML = `<span class="fa-li"><i class="fa-duotone fa-light fa-farm fa-fw"></i></span> <b>${name}</b> is Farmer Level ${farmerLevel} with title ${farmerTitle}`
+
+  return li
+}
+function getInfoFarmerAchieve(player: IPlayer, level10Count: number, skills: ISkillPoint[]): HTMLLIElement {
+  const name = player.name
+
+  const li = kel("li")
+  li.innerHTML = `<span class="fa-li"><i class="fa-duotone fa-light fa-farm fa-fw"></i></span> <b>${name}</b> has reached level 10 in ${level10Count} of 5 skills`
+
+  const ulAchieves = kel("ul", "fa-ul")
+
+  const achieves = detail_skills.achieves
+
+  const infoAchieve1 = getAchieve(achieves[0], level10Count)
+  const infoAchieve2 = getAchieve(achieves[1], level10Count)
+
+  const ulReaches = kel("ul", "fa-ul")
+
+  const reaches = skills.filter((skill) => skill.name).map((skill) => getReach(skill))
+
+  ulReaches.append(...reaches)
+
+  infoAchieve2.append(ulReaches)
+
+  ulAchieves.append(infoAchieve1, infoAchieve2)
+
+  li.append(ulAchieves)
+
+  return li
+}
+
+function skillCard(player: IPlayer, skills: ISkillPoint[]): HTMLDivElement {
+  const ul = kel("ul", "fa-ul")
 
   const level10Count = skills.filter((skill) => skill.level >= 10).length
 
-  const resultText = `<span class="fa-li"><i class="fa-duotone fa-light fa-farm fa-fw"></i></span> <b>${name}</b> has reached level 10 in ${level10Count} of 5 skills`
+  const infoFarmerTitle = getInfoFarmerTitle(player, skills)
 
-  const descResult = kel("li", "skill-result", { e: resultText })
+  const infoFarmerAchieve = getInfoFarmerAchieve(player, level10Count, skills)
 
-  const achieves = detail_skills.achieves.map((achieve) => getAchieve(achieve, level10Count))
-
-  const achieveCard = kel("ul", "fa-ul", { e: achieves })
-  const achieveCardParent = kel("li", "skill-detail", { e: achieveCard })
-
-  const reaches = skills.filter((skill) => skill.name).map((skill) => getReach(skill))
-  const reachedCard = kel("ul", "fa-ul", { e: reaches })
-  const reachedCardParent = kel("li", null, { e: reachedCard })
-
-  achieveCard.append(reachedCardParent)
-
-  const ul = kel("ul", "fa-ul", { e: [descTitle, descResult, achieveCardParent] })
+  ul.append(infoFarmerTitle, infoFarmerAchieve)
+  // const ul = kel("ul", "fa-ul", { e: [descTitle, descResult, achieveCardParent] })
 
   const card = kel("div", "card", { e: ul, a: { id: `data-skills-${player.umid}` } })
   return card
