@@ -118,7 +118,14 @@ function getInfoFarmerAchieve(player: IPlayer, level10Count: number, skills: ISk
 
   const ulReaches = kel("ul", "fa-ul")
 
-  const reaches = skills.filter((skill) => skill.name).map((skill) => getReach(skill))
+  const reaches = skills
+    .filter((skill) => skill.name)
+    .map((skill) => getReach(skill))
+    .sort((a, b) => {
+      if (a.classList.contains("done")) return 1
+      if (b.classList.contains("done")) return -1
+      return 0
+    })
 
   ulReaches.append(...reaches)
 

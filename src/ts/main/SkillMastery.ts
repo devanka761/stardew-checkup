@@ -129,33 +129,39 @@ function getInfoMasteryXP(player: IPlayer): HTMLLIElement {
 }
 
 function getPerksAcquired(perks: string[]): HTMLLIElement[] {
-  const masteryPerks: HTMLLIElement[] = detail_skill_mastery.skills.map((skill, i) => {
-    const li = kel("li", "goal")
+  const masteryPerks: HTMLLIElement[] = detail_skill_mastery.skills
+    .map((skill, i) => {
+      const li = kel("li", "goal")
 
-    const isDone = perks.some((perk) => perk === `mastery_${i}`)
+      const isDone = perks.some((perk) => perk === `mastery_${i}`)
 
-    const icon = `fa-duotone fa-solid fa-circle-${isDone ? "check" : "xmark"} fa-fw`
+      const icon = `fa-duotone fa-solid fa-circle-${isDone ? "check" : "xmark"} fa-fw`
 
-    const anchor = toAnchor(`${skill} Mastery`, "https://stardewvalleywiki.com/Mastery_Cave#Masteries", {
-      asText: true,
-      blank: true,
-      className: "cc"
+      const anchor = toAnchor(`${skill} Mastery`, "https://stardewvalleywiki.com/Mastery_Cave#Masteries", {
+        asText: true,
+        blank: true,
+        className: "cc"
+      })
+
+      const liText = `<span class='fa-li'><i class="${icon}"></i></span> ${anchor}`
+      li.innerHTML = liText
+
+      if (isDone) {
+        li.classList.add("done")
+      } else {
+        const status = kel("span", "status")
+        li.append(status)
+
+        status.innerHTML = ` -- not acquired`
+      }
+
+      return li
     })
-
-    const liText = `<span class='fa-li'><i class="${icon}"></i></span> ${anchor}`
-    li.innerHTML = liText
-
-    if (isDone) {
-      li.classList.add("done")
-    } else {
-      const status = kel("span", "status")
-      li.append(status)
-
-      status.innerHTML = ` -- not acquired`
-    }
-
-    return li
-  })
+    .sort((a, b) => {
+      if (a.classList.contains("done")) return 1
+      if (b.classList.contains("done")) return -1
+      return 0
+    })
 
   return masteryPerks
 }

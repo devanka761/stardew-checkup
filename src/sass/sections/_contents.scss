@@ -39,6 +39,24 @@
       }
     }
   }
+  &.skills {
+    background-color: v.$px1;
+  }
+  &.skill-mastery {
+    background-color: v.$px25;
+  }
+  &.quests {
+    background-color: v.$px1;
+  }
+  &.special-orders {
+    background-color: v.$px25;
+  }
+  &.monster-hunting {
+    background-color: v.$px1;
+  }
+  &.stardrops {
+    background-color: v.$px25;
+  }
 }
 
 @media (max-width: 666px) {

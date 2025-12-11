@@ -42,6 +42,7 @@ export interface IPlayer {
   masteryExp: number
   masteryPerks: string[]
   questsCompleted: number
+  maxStamina: number
   stardrops: string[]
   recipesCooked: IKeyValueList
   craftingRecipes: IKeyValueList

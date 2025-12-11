@@ -7,6 +7,7 @@ import SkillMastery from "./SkillMastery"
 import Quests from "./Quests"
 import SpecialOrders from "./SpecialOrders"
 import MonsterHunting from "./MonsterHunting"
+import Stardrops from "./Stardrops"
 
 export type ISection = {
   home: Home | null
@@ -18,6 +19,7 @@ export type ISection = {
   quests: Quests | null
   specialOrders: SpecialOrders | null
   monsterHunting: MonsterHunting | null
+  stardrops: Stardrops | null
 }
 
 export const sections: ISection = {
@@ -29,5 +31,6 @@ export const sections: ISection = {
   skillMastery: null,
   quests: null,
   specialOrders: null,
-  monsterHunting: null
+  monsterHunting: null,
+  stardrops: null
 }

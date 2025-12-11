@@ -17,6 +17,7 @@ interface IIdentity {
   masteryExp: (data: ISival) => ISival
   masteryPerks: (data: ISival) => ISival
   questsCompleted: (data: ISival) => ISival
+  maxStamina: (data: ISival) => ISival
   stardrops: (data: ISival) => ISival
   recipesCooked: (data: ISival) => ISival
   craftingRecipes: (data: ISival) => ISival
@@ -282,6 +283,9 @@ const identity: IIdentity = {
 
     return 0
   },
+  maxStamina(data): number {
+    return typeof data.maxStamina === "number" ? data.maxStamina : 0
+  },
   stardrops(data): string[] {
     const items: string[] = []
 
@@ -400,6 +404,7 @@ export function getPlayers(players: ISival[]): IPlayer[] {
       masteryExp: identity.masteryExp(player),
       masteryPerks: identity.masteryPerks(player),
       questsCompleted: identity.questsCompleted(player),
+      maxStamina: identity.maxStamina(player),
       stardrops: identity.stardrops(player),
       recipesCooked: identity.recipesCooked(player),
       craftingRecipes: identity.craftingRecipes(player),

@@ -15,6 +15,7 @@ import SkillMastery from "./SkillMastery"
 import Quests from "./Quests"
 import SpecialOrders from "./SpecialOrders"
 import MonsterHunting from "./MonsterHunting"
+import Stardrops from "./Stardrops"
 
 export default class Home implements PrimarySection {
   readonly id: string = "home"
@@ -131,6 +132,7 @@ export default class Home implements PrimarySection {
     new Quests(saveData.players).init()
     new SpecialOrders(saveData).init()
     new MonsterHunting(saveData.players).init()
+    new Stardrops(saveData.players).init()
   }
 
   private createNote(): HTMLDivElement {
