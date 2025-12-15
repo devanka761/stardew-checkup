@@ -83,7 +83,9 @@ function getGuildAccess(kills: number): HTMLLIElement {
   return li
 }
 
-function getTotalKills(player: IPlayer, kills: number): HTMLLIElement {
+function getTotalKills(player: IPlayer, categoriesKilled: IKeyValueList): HTMLLIElement {
+  const kills = Object.values(categoriesKilled).reduce((a, b) => a + b, 0)
+
   const li = kel("li")
   li.innerHTML = `<span class="fa-li"><i class="fa-duotone fa-light fa-sword"></i></span> <b>${player.name}</b> has killed ${toCommas(kills)} monster(s)`
 
@@ -180,24 +182,9 @@ function getMonsterGoals(categoriesKilled: IKeyValueList, goals: typeof monsters
   return li
 }
 
-function getInfoMonsterEradication(player: IPlayer): HTMLLIElement {
-  const categoriesKilled: IKeyValueList = {}
-
-  const enemies = monsters.monsters
+function getInfoMonsterEradication(player: IPlayer, categoriesKilled: IKeyValueList): HTMLLIElement {
   const goals = monsters.goals
   const goalsReq = Object.keys(goals).length
-
-  const killed = player.monstersKilled
-
-  Object.keys(killed).forEach((k) => {
-    const enemy = enemies[k as keyof typeof enemies] || "others"
-    if (!categoriesKilled[enemy]) categoriesKilled[enemy] = 0
-    categoriesKilled[enemy] += killed[k]
-  })
-
-  Object.keys(goals).forEach((k) => {
-    if (!categoriesKilled[k]) categoriesKilled[k] = 0
-  })
 
   const goalsCompleted = Object.keys(goals)
     .filter((k) => k !== "others")
@@ -242,15 +229,30 @@ export default class MonsterHunting implements PrimarySection {
 
       field.append(card)
 
+      const categoriesKilled: IKeyValueList = {}
+
+      const enemies = monsters.monsters
+      const goals = monsters.goals
+
+      const killed = player.monstersKilled
+
+      Object.keys(killed).forEach((k) => {
+        const enemy = enemies[k as keyof typeof enemies] || "others"
+        if (!categoriesKilled[enemy]) categoriesKilled[enemy] = 0
+        categoriesKilled[enemy] += killed[k]
+      })
+
+      Object.keys(goals).forEach((k) => {
+        if (!categoriesKilled[k]) categoriesKilled[k] = 0
+      })
+
       const infoLocalMine = getInfoLocalMine(player)
 
       const infoSkullCavern = getInfoSkullCavern(player)
 
-      const kills = Object.values(player.monstersKilled).reduce((a, b) => a + b, 0)
+      const infoTotalKills = getTotalKills(player, categoriesKilled)
 
-      const infoTotalKills = getTotalKills(player, kills)
-
-      const infoMonsterEradication = getInfoMonsterEradication(player)
+      const infoMonsterEradication = getInfoMonsterEradication(player, categoriesKilled)
 
       ulRoot.append(infoLocalMine, infoSkullCavern, infoTotalKills, infoMonsterEradication)
     })
